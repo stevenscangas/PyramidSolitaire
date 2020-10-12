@@ -102,6 +102,13 @@ public class PyramidSolitaireTextualController implements PyramidSolitaireContro
         throw new IllegalStateException("Cannot transmit output");
       }
 
+      // throw exception if no input left to read from scanner
+      if(!scanner.hasNext()){
+        throw new IllegalStateException("Cannot receive any input from scanner");
+      }
+
+
+
       // render the game state
 
         try {
@@ -112,10 +119,6 @@ public class PyramidSolitaireTextualController implements PyramidSolitaireContro
         } catch (IOException e) {
           e.printStackTrace();
         }
-
-
-      // keeps track if change was made so far, if not, dont re-append pyramid
-      boolean changeMade = false;
 
       // start input string as empty string
       String inputString = "";
@@ -145,189 +148,40 @@ public class PyramidSolitaireTextualController implements PyramidSolitaireContro
         // INPUTS: 2
         case "rm1":
 
-          int row;
-          int card;
-
-          String fieldInput = ignoreInvalidInputOrQuit(scanner);
-          if(fieldInput.equals("quit")){
+          // run helper function that looks for rm1 inputs
+          if(remove1Command(scanner,model)){
             hasQuit = true;
-            break;
-          } else {
-            // otherwise the row input is the next int
-            row = Integer.parseInt(fieldInput);
-          }
-
-          fieldInput = ignoreInvalidInputOrQuit(scanner);
-          if(fieldInput.equals("quit")){
-            hasQuit = true;
-            break;
-          } else {
-            // otherwise the row input is the next int
-            card = Integer.parseInt(fieldInput);
-          }
-
-          // try to run the code on the model with the input row and card indexed to 1
-          try {
-            model.remove(row - 1, card - 1);
-            changeMade = true;
-          } catch (IllegalArgumentException | IllegalStateException e) {
-            try {
-              ap.append("Invalid move. Play again. *Pyramid card is "
-                  + "out of bounds or value is not 13*");
-              ap.append('\n');
-            } catch (IOException ioException) {
-              ioException.printStackTrace();
-            }
-            e.printStackTrace();
           }
 
           break;
-
-        // Remove 2 cards from pyramid (add to 13)
-        // INPUTS: 4
         case "rm2":
 
-          int row1;
-          int row2;
-          int card1;
-          int card2;
-
-          // skip bogus inputs
-
-          fieldInput = ignoreInvalidInputOrQuit(scanner);
-          if(fieldInput.equals("quit")){
+          // run helper function that looks for rm2 inputs
+          if(remove2Command(scanner,model)){
             hasQuit = true;
-            break;
-          } else {
-            // otherwise the row input is the next int
-            row1 = Integer.parseInt(fieldInput);
           }
 
-          fieldInput = ignoreInvalidInputOrQuit(scanner);
-          if(fieldInput.equals("quit")){
-            hasQuit = true;
-            break;
-          } else {
-            // otherwise the row input is the next int
-            card1 = Integer.parseInt(fieldInput);
-          }
-
-
-          fieldInput = ignoreInvalidInputOrQuit(scanner);
-          if(fieldInput.equals("quit")){
-            hasQuit = true;
-            break;
-          } else {
-            // otherwise the row input is the next int
-            row2 = Integer.parseInt(fieldInput);
-          }
-
-          fieldInput = ignoreInvalidInputOrQuit(scanner);
-          if(fieldInput.equals("quit")){
-            hasQuit = true;
-            break;
-          } else {
-            // otherwise the row input is the next int
-            card2 = Integer.parseInt(fieldInput);
-          }
-
-          // try to run the code on the model with the input row and card indexed to 1
-          try {
-            model.remove(row1 - 1, card1 - 1,row2 - 1, card2 - 1);
-            changeMade = true;
-          } catch (IllegalArgumentException | IllegalStateException e) {
-            try {
-              ap.append("Invalid move. Play again. *One or more pyramid cards are out of bounds or "
-                  + "the two values do not add to 13*");
-              ap.append('\n');
-            } catch (IOException ioException) {
-              ioException.printStackTrace();
-            }
-            e.printStackTrace();
-          }
           break;
 
         // Remove a card from pyramid with one from draw (add to 13)
         // INPUTS: 3
         case "rmwd":
 
-          int drawIndex3;
-          int row3;
-          int card3;
-
-          fieldInput = ignoreInvalidInputOrQuit(scanner);
-          if(fieldInput.equals("quit")){
+          // run helper function that looks for rm2 inputs
+          if(removeDrawCommand(scanner,model)){
             hasQuit = true;
-            break;
-          } else {
-            // otherwise the row input is the next int
-            drawIndex3 = Integer.parseInt(fieldInput);
           }
 
-
-          fieldInput = ignoreInvalidInputOrQuit(scanner);
-          if(fieldInput.equals("quit")){
-            hasQuit = true;
-            break;
-          } else {
-            // otherwise the row input is the next int
-            row3 = Integer.parseInt(fieldInput);
-          }
-
-          fieldInput = ignoreInvalidInputOrQuit(scanner);
-          if(fieldInput.equals("quit")){
-            hasQuit = true;
-            break;
-          } else {
-            // otherwise the row input is the next int
-            card3 = Integer.parseInt(fieldInput);
-          }
-
-
-          // try to run the code on the model with the input drawIndex/row/card indexed to 1
-          try {
-            model.removeUsingDraw(drawIndex3 - 1,row3 - 1, card3 - 1);
-            changeMade = true;
-          } catch (IllegalArgumentException | IllegalStateException e) {
-            try {
-              ap.append("Invalid move. Play again. *Pyramid or draw card is out of bounds or"
-                  + "values of the two cards do not add to 13*");
-              ap.append('\n');
-            } catch (IOException ioException) {
-              ioException.printStackTrace();
-            }
-            e.printStackTrace();
-          }
           break;
 
         // Discard 1 card from the draw pile
         // INPUTS: 1
         case "dd":
 
-          int drawIndex;
 
-          fieldInput = ignoreInvalidInputOrQuit(scanner);
-          if(fieldInput.equals("quit")){
+          // run helper function that looks for rm2 inputs
+          if(discardDrawCommand(scanner,model)){
             hasQuit = true;
-            break;
-          } else {
-            // otherwise the row input is the next int
-            drawIndex = Integer.parseInt(fieldInput);
-          }
-
-
-          // try to run the code on the model with the input drawIndex indexed to 1
-          try {
-            model.discardDraw(drawIndex - 1);
-            changeMade = true;
-          } catch (IllegalArgumentException | IllegalStateException e) {
-            try {
-              ap.append("Invalid move. Play again. *Draw index is out of bounds*");
-              ap.append('\n');
-            } catch (IOException ioException) {
-              ioException.printStackTrace();
-            }
-            e.printStackTrace();
           }
 
           break;
@@ -409,6 +263,186 @@ public class PyramidSolitaireTextualController implements PyramidSolitaireContro
 
   }
 
+  private boolean remove1Command(Scanner scanner,PyramidSolitaireModel model) {
+
+    int row;
+    int card;
+
+    String fieldInput = ignoreInvalidInputOrQuit(scanner);
+    if(fieldInput.equals("quit")){
+      return true;
+    } else {
+      // otherwise the row input is the next int
+      row = Integer.parseInt(fieldInput);
+    }
+
+    fieldInput = ignoreInvalidInputOrQuit(scanner);
+    if(fieldInput.equals("quit")){
+      return true;
+    } else {
+      // otherwise the row input is the next int
+      card = Integer.parseInt(fieldInput);
+    }
+
+    // try to run the code on the model with the input row and card indexed to 1
+    try {
+      model.remove(row - 1, card - 1);
+    } catch (IllegalArgumentException | IllegalStateException e) {
+      try {
+        ap.append("Invalid move. Play again. *Pyramid card is "
+            + "out of bounds or value is not 13*");
+        ap.append('\n');
+      } catch (IOException ioException) {
+        ioException.printStackTrace();
+      }
+      e.printStackTrace();
+    }
+
+    return false;
+  }
+
+  private boolean remove2Command(Scanner scanner,PyramidSolitaireModel model){
+
+    // Remove 2 cards from pyramid (add to 13)
+    // INPUTS: 4
+
+
+    int row1;
+    int row2;
+    int card1;
+    int card2;
+
+    // skip bogus inputs
+
+    String fieldInput = ignoreInvalidInputOrQuit(scanner);
+    if(fieldInput.equals("quit")){
+      return true;
+    } else {
+      // otherwise the row input is the next int
+      row1 = Integer.parseInt(fieldInput);
+    }
+
+    fieldInput = ignoreInvalidInputOrQuit(scanner);
+    if(fieldInput.equals("quit")){
+      return true;
+    } else {
+      // otherwise the row input is the next int
+      card1 = Integer.parseInt(fieldInput);
+    }
+
+
+    fieldInput = ignoreInvalidInputOrQuit(scanner);
+    if(fieldInput.equals("quit")){
+      return true;
+    } else {
+      // otherwise the row input is the next int
+      row2 = Integer.parseInt(fieldInput);
+    }
+
+    fieldInput = ignoreInvalidInputOrQuit(scanner);
+    if(fieldInput.equals("quit")){
+      return true;
+    } else {
+      // otherwise the row input is the next int
+      card2 = Integer.parseInt(fieldInput);
+    }
+
+    // try to run the code on the model with the input row and card indexed to 1
+    try {
+      model.remove(row1 - 1, card1 - 1,row2 - 1, card2 - 1);
+
+    } catch (IllegalArgumentException | IllegalStateException e) {
+      try {
+        ap.append("Invalid move. Play again. *One or more pyramid cards are out of bounds or "
+            + "the two values do not add to 13*");
+        ap.append('\n');
+      } catch (IOException ioException) {
+        ioException.printStackTrace();
+      }
+      e.printStackTrace();
+    }
+    return false;
+  }
+
+  private boolean removeDrawCommand(Scanner scanner,PyramidSolitaireModel model) {
+
+    int drawIndex3;
+    int row3;
+    int card3;
+
+    String fieldInput = ignoreInvalidInputOrQuit(scanner);
+    if(fieldInput.equals("quit")){
+      return true;
+    } else {
+      // otherwise the row input is the next int
+      drawIndex3 = Integer.parseInt(fieldInput);
+    }
+
+
+    fieldInput = ignoreInvalidInputOrQuit(scanner);
+    if(fieldInput.equals("quit")){
+      return true;
+    } else {
+      // otherwise the row input is the next int
+      row3 = Integer.parseInt(fieldInput);
+    }
+
+    fieldInput = ignoreInvalidInputOrQuit(scanner);
+    if(fieldInput.equals("quit")){
+      return true;
+    } else {
+      // otherwise the row input is the next int
+      card3 = Integer.parseInt(fieldInput);
+    }
+
+
+    // try to run the code on the model with the input drawIndex/row/card indexed to 1
+    try {
+      model.removeUsingDraw(drawIndex3 - 1,row3 - 1, card3 - 1);
+
+    } catch (IllegalArgumentException | IllegalStateException e) {
+      try {
+        ap.append("Invalid move. Play again. *Pyramid or draw card is out of bounds or"
+            + "values of the two cards do not add to 13*");
+        ap.append('\n');
+      } catch (IOException ioException) {
+        ioException.printStackTrace();
+      }
+      e.printStackTrace();
+    }
+    return false;
+  }
+
+  private boolean discardDrawCommand(Scanner scanner,PyramidSolitaireModel model) {
+
+    int drawIndex;
+
+    String fieldInput = ignoreInvalidInputOrQuit(scanner);
+    if(fieldInput.equals("quit")){
+      return true;
+    } else {
+      // otherwise the row input is the next int
+      drawIndex = Integer.parseInt(fieldInput);
+    }
+
+
+    // try to run the code on the model with the input drawIndex indexed to 1
+    try {
+      model.discardDraw(drawIndex - 1);
+    } catch (IllegalArgumentException | IllegalStateException e) {
+      try {
+        ap.append("Invalid move. Play again. *Draw index is out of bounds*");
+        ap.append('\n');
+      } catch (IOException ioException) {
+        ioException.printStackTrace();
+      }
+      e.printStackTrace();
+    }
+
+
+
+    return false;
+  }
 
 }
 

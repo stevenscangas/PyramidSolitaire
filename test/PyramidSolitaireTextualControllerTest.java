@@ -155,7 +155,7 @@ public class PyramidSolitaireTextualControllerTest {
     PyramidSolitaireController controller = new PyramidSolitaireTextualController(
         in, out);
     controller.playGame(model, model.getDeck(),
-        false, 1, 0);
+        false, 1, 3);
   }
 
   // if stringreader has only a null then it cannot be constructed, javalib will not allow
@@ -174,7 +174,7 @@ public class PyramidSolitaireTextualControllerTest {
     PyramidSolitaireController controller = new PyramidSolitaireTextualController(
         in, out);
     controller.playGame(model, model.getDeck(),
-        false, 1, 0);
+        false, 1, 3);
   }
 
   // if stringbuilder has only a null then it cannot be constructed, javalib will not allow
