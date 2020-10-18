@@ -263,7 +263,7 @@ public class FakeModel implements PyramidSolitaireModel<Card> {
    */
   @Override
   public int getNumDraw() {
-      return this.drawArray.length;
+    return this.drawArray.length;
   }
 
   /**
@@ -315,11 +315,9 @@ public class FakeModel implements PyramidSolitaireModel<Card> {
       }
     }
 
-    if(!allDrawNull){
+    if (!allDrawNull) {
       return false;
     }
-
-
 
     int gottenNumRows = getNumRows();
 
@@ -391,7 +389,7 @@ public class FakeModel implements PyramidSolitaireModel<Card> {
 
   @Override
   public int getScore() throws IllegalStateException {
-   return 1;
+    return 1;
   }
 
   /**

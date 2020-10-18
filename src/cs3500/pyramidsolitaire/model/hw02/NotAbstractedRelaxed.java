@@ -11,14 +11,14 @@ import java.util.Set;
  * The model for playing a game of Pyramid Solitaire: this maintains the state and enforces the
  * rules of gameplay.
  */
-public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
+public class NotAbstractedRelaxed implements PyramidSolitaireModel<Card> {
 
   /**
    * This is the main constructor for BasicPyramidSolitaire Class. Returns BasicPyramidSolitaire
    * with not started game status, and creates a random object initialized with the current time to
    * get a seemingly truly random value every run.
    */
-  public BasicPyramidSolitaire() {
+  public NotAbstractedRelaxed() {
     // initialize the game state to not started, this will be started in startGame class
     gameStatus = GameStatus.NOTSTARTED;
     rand = new Random(System.currentTimeMillis());
@@ -32,26 +32,26 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
    * @param randomValue the randomValue to be used to initialize the rand for testing.
    */
   // constructor to set rand for testing
-  public BasicPyramidSolitaire(int randomValue) {
+  public NotAbstractedRelaxed(int randomValue) {
     // initialize the game state to not started, this will be started in startGame class
     gameStatus = GameStatus.NOTSTARTED;
     rand = new Random(randomValue);
   }
 
   // 2D array to hold all of the Cards in the pyramid
-  protected final List<ArrayList<Card>> pyramidArray = new ArrayList<ArrayList<Card>>();
+  private final List<ArrayList<Card>> pyramidArray = new ArrayList<ArrayList<Card>>();
 
   // ArrayList to hold all of the cards in the stock (left in the deck and not visible)
-  protected final List<Card> stockList = new ArrayList<Card>();
+  private final List<Card> stockList = new ArrayList<Card>();
 
   // ArrayList to hold the cards in the draw pile that are visible
-  protected Card[] drawArray;
+  private Card[] drawArray;
 
   // status of game, is started? , won or lost?
   public GameStatus gameStatus = GameStatus.NOTSTARTED;
 
   // rand value to initialize rand method for testing
-  protected final Random rand;
+  private final Random rand;
 
   /**
    * Return a valid and complete deck of cards for a game of Pyramid Solitaire. There is no
@@ -221,6 +221,13 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
       throw new IllegalStateException("Game has not been started yet.");
     }
 
+    // if these cards are an exposed pair, remove them
+    if (isExposedPair(row1, card1, row2, card2)) {
+      pyramidArray.get(row1).set(card1, null);
+      pyramidArray.get(row2).set(card2, null);
+      return;
+    }
+
     // check bounds of all row and card parameters, throw exception if out of bounds of pyramid
     if (row1 > getNumRows() - 1 || row2 > getNumRows() - 1) {
       throw new IllegalArgumentException("Rows is not within the bounds"
@@ -243,11 +250,7 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
     }
 
 
-    // if these cards are an exposed pair, remove them
-    if (isExposedPair(row1, card1, row2, card2)) {
-      pyramidArray.get(row1).set(card1, null);
-      pyramidArray.get(row2).set(card2, null);
-    }
+
 
     // see if both cards are exposed, if so, continue
     if (!isCellExposed(row1, card1) || !isCellExposed(row2, card2)) {
@@ -521,7 +524,6 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
 
     boolean pyramidMatchExists = false;
     boolean drawMatchExists = false;
-    boolean exposedPairExists = false;
 
     // now check every card in the exposed list against every other card
     // in it to see if any add up to 13
@@ -552,31 +554,9 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
         }
       }
     }
-
-    // check if any two cards on the pyramid form an exposed pair
-    // for every exposed cell we find, check if the card in there forms a pair with
-    // either of the two cards above it
-
-    // iterate through each row of pyramid 2D array
-    for (int row = 0; row < gottenNumRows; row++) {
-      // iterate through each individual card in this row
-      for (int cardNum = 0; cardNum <= getRowWidth(row) - 1; cardNum++) {
-
-        // if cell is exposed, check if card in there forms a pair
-        if (getCardAt(row, cardNum) != null && isCellExposed(row, cardNum)) {
-
-          if(isExposedPair(row,cardNum,row-1,cardNum)
-              || isExposedPair(row,cardNum,row-1,cardNum+1)){
-            exposedPairExists = true;
-          }
-        }
-      }
-    }
-
-
     // game not over until there are no combinations AND no cards left in stock to use
 
-    if (pyramidMatchExists || drawMatchExists || exposedPairExists) {
+    if (pyramidMatchExists || drawMatchExists) {
       return false;
     }
     if (getNumDraw() == 0) {
@@ -651,6 +631,7 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
           + "cards in that row.");
     }
 
+
     // never return private object so that client cannot modify
     Card cardCopy = pyramidArray.get(row).get(card);
     return cardCopy;
@@ -702,7 +683,7 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
     }
 
     // check bounds of row and card parameters, throw exception if out of bounds of pyramid
-    if (row > getNumRows() - 1 || row < 0 || card > getRowWidth(row) - 1 || card < 0) {
+    if (row > getNumRows() - 1 || row < 0 || card >= getRowWidth(row) || card < 0) {
       throw new IllegalArgumentException("Either the card or row is not within the bounds"
           + " of the card pyramid.");
     }
@@ -783,5 +764,6 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
     }
     return false;
   }
+
 
 }

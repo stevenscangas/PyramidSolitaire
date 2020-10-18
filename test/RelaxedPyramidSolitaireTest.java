@@ -1,5 +1,8 @@
 import cs3500.pyramidsolitaire.model.hw02.BasicPyramidSolitaire;
 import cs3500.pyramidsolitaire.model.hw02.Card;
+import cs3500.pyramidsolitaire.model.hw02.NotAbstractedRelaxed;
+import cs3500.pyramidsolitaire.model.hw02.PyramidSolitaireModel;
+import cs3500.pyramidsolitaire.model.hw02.RelaxedPyramidSolitaire;
 import org.junit.Test;
 import cs3500.pyramidsolitaire.view.PyramidSolitaireTextualView;
 
@@ -15,12 +18,12 @@ import java.util.List;
 /**
  * This class is used for testing purposes.
  */
-public class BasicPyramidSolitaireTest {
+public class RelaxedPyramidSolitaireTest {
 
   static final int randValue = 8;
 
-  BasicPyramidSolitaire defaultSolitaire = new BasicPyramidSolitaire();
-  BasicPyramidSolitaire notRandomSolitaire = new BasicPyramidSolitaire(randValue);
+  PyramidSolitaireModel<Card> defaultSolitaire = new RelaxedPyramidSolitaire();
+  PyramidSolitaireModel<Card> notRandomSolitaire = new RelaxedPyramidSolitaire(randValue);
 
   // create the deck that the getDeck() method should return
 
@@ -77,6 +80,7 @@ public class BasicPyramidSolitaireTest {
       new Card(13, "diamonds"),
       new Card(13, "hearts"),
       new Card(13, "spades"));
+
 
 
   // test getDeck method to make sure it returns standard list of cards
@@ -436,7 +440,6 @@ public class BasicPyramidSolitaireTest {
   }
 
 
-
   // check if card is not 13 value (not king)
   // throw exception if so
   @Test(expected = IllegalArgumentException.class)
@@ -708,9 +711,10 @@ public class BasicPyramidSolitaireTest {
     notRandomSolitaire.discardDraw(0);
     notRandomSolitaire.discardDraw(1);
     notRandomSolitaire.discardDraw(2);
+    System.out.println(notRandomSolitaireTextualView.toString());
     assertEquals(notRandomSolitaire.getScore(), 44);
     notRandomSolitaire.removeUsingDraw(1, 2, 1);
-    System.out.println(notRandomSolitaireTextualView.toString());
+
 
     assertEquals(notRandomSolitaire.getScore(), 33);
   }
@@ -1116,6 +1120,7 @@ public class BasicPyramidSolitaireTest {
   @Test
   public void testTextualToStringGameNotStarted() {
 
+
     PyramidSolitaireTextualView notRandomSolitaireTextualView =
         new PyramidSolitaireTextualView(notRandomSolitaire);
 
@@ -1123,6 +1128,113 @@ public class BasicPyramidSolitaireTest {
 
   }
 
+  // see if remove method can actually remove a pair of cards correctly
+  @Test
+  public void testRemoveTwoPair() {
+    PyramidSolitaireTextualView pyramidSolitaireTextualView =
+        new PyramidSolitaireTextualView(notRandomSolitaire);
+    notRandomSolitaire.startGame(standardDeck, true, 8, 3);
+
+    System.out.println("Before remove: \n");
+    System.out.println(pyramidSolitaireTextualView.toString());
+
+    notRandomSolitaire.remove(7, 4, 7, 6);
+    notRandomSolitaire.remove(7, 3, 6, 3);
+
+    System.out.println("After remove: \n");
+    System.out.println(pyramidSolitaireTextualView.toString());
+
+    assertEquals(notRandomSolitaire.getCardAt(6, 3), null);
+
+  }
+
+  // see if remove method can actually remove a pair of cards correctly
+  @Test(expected = IllegalArgumentException.class)
+  public void testNot13RemoveTwoPair() {
+    PyramidSolitaireTextualView pyramidSolitaireTextualView =
+        new PyramidSolitaireTextualView(notRandomSolitaire);
+    notRandomSolitaire.startGame(standardDeck, true, 8, 3);
+
+
+
+    notRandomSolitaire.remove(7, 4, 7, 6);
+    notRandomSolitaire.remove(7, 3, 6, 3);
+    notRandomSolitaire.remove(7,5,7,7);
+
+
+    System.out.println("Before remove: \n");
+    System.out.println(pyramidSolitaireTextualView.toString());
+
+    // do not add to 13
+
+    notRandomSolitaire.remove(7,2,6,2);
+
+    System.out.println("After remove: \n");
+    System.out.println(pyramidSolitaireTextualView.toString());
+
+    assertEquals(notRandomSolitaire.getCardAt(6, 2),new Card(8,"clubs"));
+
+  }
+
+  // see if remove method can actually remove a pair of cards correctly
+  @Test(expected = IllegalArgumentException.class)
+  public void testTopCardNotExposedRowRemoveTwoPair() {
+    PyramidSolitaireTextualView pyramidSolitaireTextualView =
+        new PyramidSolitaireTextualView(notRandomSolitaire);
+    notRandomSolitaire.startGame(standardDeck, true, 6, 3);
+
+
+    System.out.println("Before remove: \n");
+    System.out.println(pyramidSolitaireTextualView.toString());
+
+
+
+    notRandomSolitaire.remove(3,2,4,3);
+
+    System.out.println("After remove: \n");
+    System.out.println(pyramidSolitaireTextualView.toString());
+
+
+  }
+
+  // see if remove method can actually remove a pair of cards correctly
+  @Test(expected = IllegalArgumentException.class)
+  public void testTwoPairNot1RowApart() {
+    PyramidSolitaireTextualView pyramidSolitaireTextualView =
+        new PyramidSolitaireTextualView(notRandomSolitaire);
+    notRandomSolitaire.startGame(standardDeck, true, 6, 3);
+
+
+    System.out.println("Before remove: \n");
+    System.out.println(pyramidSolitaireTextualView.toString());
+
+    notRandomSolitaire.remove(5,1,2,0);
+
+    System.out.println("After remove: \n");
+    System.out.println(pyramidSolitaireTextualView.toString());
+
+
+  }
+
+
+  // see if remove method can actually remove a pair of cards correctly
+  @Test(expected = IllegalArgumentException.class)
+  public void testTwoPairNot1CardApart() {
+    PyramidSolitaireTextualView pyramidSolitaireTextualView =
+        new PyramidSolitaireTextualView(notRandomSolitaire);
+    notRandomSolitaire.startGame(standardDeck, true, 6, 3);
+
+
+    System.out.println("Before remove: \n");
+    System.out.println(pyramidSolitaireTextualView.toString());
+
+    notRandomSolitaire.remove(5,0,4,3);
+
+    System.out.println("After remove: \n");
+    System.out.println(pyramidSolitaireTextualView.toString());
+
+
+  }
 
 }
 

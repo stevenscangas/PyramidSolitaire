@@ -8,50 +8,35 @@ import java.util.Random;
 import java.util.Set;
 
 /**
- * The model for playing a game of Pyramid Solitaire: this maintains the state and enforces the
- * rules of gameplay.
+ * The model for playing a multiple pyramid game of Pyramid Solitaire: this maintains the state and
+ * enforces the rules of gameplay.
  */
-public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
+public class MultiPyramidSolitaire extends BasicPyramidSolitaire
+    implements PyramidSolitaireModel<Card> {
 
   /**
-   * This is the main constructor for BasicPyramidSolitaire Class. Returns BasicPyramidSolitaire
+   * This is the main constructor for MultiPyramidSolitaire Class. Returns MultiPyramidSolitaire
    * with not started game status, and creates a random object initialized with the current time to
    * get a seemingly truly random value every run.
    */
-  public BasicPyramidSolitaire() {
+  public MultiPyramidSolitaire() {
     // initialize the game state to not started, this will be started in startGame class
-    gameStatus = GameStatus.NOTSTARTED;
-    rand = new Random(System.currentTimeMillis());
+    super();
   }
 
   /**
-   * This is the main constructor for BasicPyramidSolitaire Class. Returns BasicPyramidSolitaire
+   * This is the main constructor for MultiPyramidSolitaire Class. Returns MultiPyramidSolitaire
    * with not started game status, and creates a random object initialized with the current time to
    * get a seemingly truly random value every run.
    *
    * @param randomValue the randomValue to be used to initialize the rand for testing.
    */
   // constructor to set rand for testing
-  public BasicPyramidSolitaire(int randomValue) {
+  public MultiPyramidSolitaire(int randomValue) {
     // initialize the game state to not started, this will be started in startGame class
-    gameStatus = GameStatus.NOTSTARTED;
-    rand = new Random(randomValue);
+    super(randomValue);
   }
 
-  // 2D array to hold all of the Cards in the pyramid
-  protected final List<ArrayList<Card>> pyramidArray = new ArrayList<ArrayList<Card>>();
-
-  // ArrayList to hold all of the cards in the stock (left in the deck and not visible)
-  protected final List<Card> stockList = new ArrayList<Card>();
-
-  // ArrayList to hold the cards in the draw pile that are visible
-  protected Card[] drawArray;
-
-  // status of game, is started? , won or lost?
-  public GameStatus gameStatus = GameStatus.NOTSTARTED;
-
-  // rand value to initialize rand method for testing
-  protected final Random rand;
 
   /**
    * Return a valid and complete deck of cards for a game of Pyramid Solitaire. There is no
@@ -215,51 +200,7 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
   @Override
   public void remove(int row1, int card1, int row2, int card2)
       throws IllegalArgumentException, IllegalStateException {
-
-
-    if (gameStatus == GameStatus.NOTSTARTED) {
-      throw new IllegalStateException("Game has not been started yet.");
-    }
-
-    // check bounds of all row and card parameters, throw exception if out of bounds of pyramid
-    if (row1 > getNumRows() - 1 || row2 > getNumRows() - 1) {
-      throw new IllegalArgumentException("Rows is not within the bounds"
-          + " of the card pyramid (vertically)");
-    }
-
-    // check bounds of all row and card parameters, throw exception if out of bounds of pyramid
-    if (card1 > getRowWidth(row1) - 1 || card2 > getRowWidth(row2)) {
-      throw new IllegalArgumentException("One of the cards is not within horizontal bounds.");
-    }
-
-    // throw exception both cards picked are the same
-    if (getCardAt(row1, card1).equals(getCardAt(row2, card2))) {
-      throw new IllegalArgumentException("Cards cannot be the same card");
-    }
-
-    // throw exception if card values don't add up to 13
-    if (getCardAt(row1, card1).getValue() + getCardAt(row2, card2).getValue() != 13) {
-      throw new IllegalArgumentException("Card values do not add up to 13.");
-    }
-
-
-    // if these cards are an exposed pair, remove them
-    if (isExposedPair(row1, card1, row2, card2)) {
-      pyramidArray.get(row1).set(card1, null);
-      pyramidArray.get(row2).set(card2, null);
-    }
-
-    // see if both cards are exposed, if so, continue
-    if (!isCellExposed(row1, card1) || !isCellExposed(row2, card2)) {
-      throw new IllegalArgumentException("One or both of these cards is not exposed.");
-    }
-
-    // if none of the above exceptions are thrown, then remove both cards
-    else {
-      pyramidArray.get(row1).set(card1, null);
-      pyramidArray.get(row2).set(card2, null);
-    }
-
+    super.remove(row1, card1, row2, card2);
   }
 
   /**
@@ -272,32 +213,7 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
    */
   @Override
   public void remove(int row, int card) throws IllegalArgumentException, IllegalStateException {
-
-    if (gameStatus == GameStatus.NOTSTARTED) {
-      throw new IllegalStateException("Game has not been started yet.");
-    }
-
-    // check bounds of row and card parameters, throw exception if out of bounds of pyramid
-    if (row > getNumRows() - 1 || card > getRowWidth(row)) {
-      throw new IllegalArgumentException("Either the card or row is not within the bounds"
-          + " of the card pyramid.");
-    }
-
-    // check if cell is exposed
-    // Throws exception if cell is not exposed
-    if (!isCellExposed(row, card)) {
-      throw new IllegalArgumentException("This card is not exposed.");
-    }
-
-    // throw exception if card values don't add up to 13
-    if (getCardAt(row, card).getValue() != 13) {
-      throw new IllegalArgumentException("Card value is not 13.");
-    }
-
-    // if none of the above exceptions are thrown, then remove the card (set it to null)
-    else {
-      pyramidArray.get(row).set(card, null);
-    }
+    super.remove(row, card);
   }
 
   /**
@@ -312,57 +228,7 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
   @Override
   public void removeUsingDraw(int drawIndex, int row, int card)
       throws IllegalArgumentException, IllegalStateException {
-
-    if (gameStatus == GameStatus.NOTSTARTED) {
-      throw new IllegalStateException("Game has not been started yet.");
-    }
-
-    // check valid draw index
-    // THROWS exception if not valid
-    if (drawIndex < 0 || drawIndex > this.getNumDraw() - 1) {
-      throw new IllegalArgumentException("drawIndex is out of bounds of draw pile");
-    }
-
-    // check if any cards left in draw array
-    // THROWS exception if not
-    if (getNumDraw() <= 0) {
-      throw new IllegalArgumentException("No cards left in draw pile.");
-    }
-
-    // check if draw index is not null
-    // THROWS exception if not valid
-    if (this.drawArray[drawIndex] == null) {
-      throw new IllegalArgumentException("Draw index is null.");
-    }
-
-    // check bounds of row and card parameters, throw exception if out of bounds of pyramid
-    // THROWS EXCEPTION
-    if (row > (getNumRows() - 1) || card > getRowWidth(row)) {
-
-      throw new IllegalArgumentException("The pyramid card is not within the bounds"
-          + " of the card pyramid");
-    }
-
-    // check if pyramid card is exposed
-    // THROWS exception if this pyramid card is not exposed
-    if (!isCellExposed(row, card)) {
-      throw new IllegalArgumentException("This pyramid card is not exposed.");
-    }
-
-    // throw exception if card values don't add up to 13
-    if (getCardAt(row, card).getValue() + getDrawCards().get(drawIndex).getValue() != 13) {
-      throw new IllegalArgumentException("Card values do not add up to 13.");
-    }
-
-    // if none of the above exceptions are thrown, then remove pyramid card & delete draw card
-    else {
-      // set value at this spot to null since card has been removed
-      pyramidArray.get(row).set(card, null);
-
-      // moves a card from the stock into draw if stock has cards left
-
-      discardDraw(drawIndex);
-    }
+    super.removeUsingDraw(drawIndex, row, card);
   }
 
   /**
@@ -374,38 +240,7 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
    */
   @Override
   public void discardDraw(int drawIndex) throws IllegalArgumentException, IllegalStateException {
-
-    if (gameStatus == GameStatus.NOTSTARTED) {
-      throw new IllegalStateException("Game has not been started yet.");
-    }
-
-    // check valid draw index
-    // THROWS exception if not valid
-    if (drawIndex < 0 || drawIndex > this.getNumDraw() - 1) {
-      throw new IllegalArgumentException("drawIndex is out of bounds of draw pile");
-    }
-
-    // throws exception if draw pile is 0
-    if (getNumDraw() <= 0) {
-      throw new IllegalArgumentException("Draw pile has size 0.");
-    }
-
-    // check if draw index is not null
-    // THROWS exception if not valid
-    if (this.drawArray[drawIndex] == null) {
-      throw new IllegalArgumentException("Draw index is null.");
-    }
-
-    // take a card from stock and sets the drawIndex to that
-    if (stockList.size() > 0) {
-      drawArray[drawIndex] = stockList.get(0);
-      stockList.remove(0);
-    }
-    // if stock empty, put a null into draw pile instead
-    else {
-      drawArray[drawIndex] = null;
-    }
-
+    super.discardDraw(drawIndex);
   }
 
   /**
@@ -565,14 +400,13 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
         // if cell is exposed, check if card in there forms a pair
         if (getCardAt(row, cardNum) != null && isCellExposed(row, cardNum)) {
 
-          if(isExposedPair(row,cardNum,row-1,cardNum)
-              || isExposedPair(row,cardNum,row-1,cardNum+1)){
+          if (isExposedPair(row, cardNum, row - 1, cardNum)
+              || isExposedPair(row, cardNum, row - 1, cardNum + 1)) {
             exposedPairExists = true;
           }
         }
       }
     }
-
 
     // game not over until there are no combinations AND no cards left in stock to use
 

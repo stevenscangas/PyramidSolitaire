@@ -18,7 +18,6 @@ public class PyramidSolitaireTextualController implements PyramidSolitaireContro
   private final Appendable ap;
 
 
-
   /**
    * Primary constructor for a PyramidSolitaireController, takes in abstract input & output.
    *
@@ -63,26 +62,20 @@ public class PyramidSolitaireTextualController implements PyramidSolitaireContro
     }
 
     // throw exception if deck is null
-    if(Objects.isNull(deck)){
+    if (Objects.isNull(deck)) {
       throw new IllegalArgumentException("Deck is null/empty");
     }
 
-
-    // throw exception here if controller is unable to successfully read input
-    // this.rd.read();
-
     // OR if the game cannot be started
     // starts the model game and inputs the given fields to playgame
-    try{
+    try {
       model.startGame(deck, shuffle, numRows, numDraw);
     } catch (IllegalArgumentException e) {
       throw new IllegalStateException("Game cannot be started with these fields.");
     }
 
-
     // create textual view of the model
-    PyramidSolitaireView view = new PyramidSolitaireTextualView(model,ap);
-
+    PyramidSolitaireView view = new PyramidSolitaireTextualView(model, ap);
 
     // boolean to represent if the user has quit the game or not
     boolean hasQuit = false;
@@ -90,12 +83,20 @@ public class PyramidSolitaireTextualController implements PyramidSolitaireContro
     // create scanner object to read inputs
     Scanner scanner = new Scanner(rd);
 
+    try {
+      view.render();
+      ap.append('\n');
+      ap.append("Score: " + model.getScore());
+      ap.append('\n');
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
     // while loop that runs until break is called to exit when the game has ended
     while (!model.isGameOver() && model.getScore() != 0) {
 
-
       // throw exception here if controller is unable to successfully transmit output
-      try{
+      try {
         this.ap.append("");
       } catch (IOException e) {
         e.printStackTrace();
@@ -103,28 +104,23 @@ public class PyramidSolitaireTextualController implements PyramidSolitaireContro
       }
 
       // throw exception if no input left to read from scanner
-      if(!scanner.hasNext()){
+      if (!scanner.hasNext()) {
         throw new IllegalStateException("Cannot receive any input from scanner");
       }
 
-
-
       // render the game state
 
-        try {
-          view.render();
-          ap.append('\n');
-          ap.append("Score: " + model.getScore());
-          ap.append('\n');
-        } catch (IOException e) {
-          e.printStackTrace();
-        }
+      try {
+        view.render();
+        ap.append('\n');
+        ap.append("Score: " + model.getScore());
+        ap.append('\n');
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
 
       // start input string as empty string
       String inputString = "";
-
-      // string to output to the screen
-      String transmitString = "";
 
       // if scanner can get a next value then read it
       if (scanner.hasNext()) {
@@ -149,7 +145,7 @@ public class PyramidSolitaireTextualController implements PyramidSolitaireContro
         case "rm1":
 
           // run helper function that looks for rm1 inputs
-          if(remove1Command(scanner,model)){
+          if (remove1Command(scanner, model)) {
             hasQuit = true;
           }
 
@@ -157,7 +153,7 @@ public class PyramidSolitaireTextualController implements PyramidSolitaireContro
         case "rm2":
 
           // run helper function that looks for rm2 inputs
-          if(remove2Command(scanner,model)){
+          if (remove2Command(scanner, model)) {
             hasQuit = true;
           }
 
@@ -168,7 +164,7 @@ public class PyramidSolitaireTextualController implements PyramidSolitaireContro
         case "rmwd":
 
           // run helper function that looks for rm2 inputs
-          if(removeDrawCommand(scanner,model)){
+          if (removeDrawCommand(scanner, model)) {
             hasQuit = true;
           }
 
@@ -178,26 +174,27 @@ public class PyramidSolitaireTextualController implements PyramidSolitaireContro
         // INPUTS: 1
         case "dd":
 
-
           // run helper function that looks for rm2 inputs
-          if(discardDrawCommand(scanner,model)){
+          if (discardDrawCommand(scanner, model)) {
             hasQuit = true;
           }
 
           break;
-      }
 
+        default: {
+          // the while loop will continue reading until one of the above commands is found
+        }
+      }
       // exit while loop before rendering if game has been quit
       if (hasQuit || model.isGameOver() || model.getScore() == 0) {
         break;
       }
 
 
-
     } // end of while loop
 
     // append quit messages to transmit string
-    if(hasQuit){
+    if (hasQuit) {
       try {
         ap.append("Game quit!");
         ap.append('\n');
@@ -222,7 +219,6 @@ public class PyramidSolitaireTextualController implements PyramidSolitaireContro
     }
 
 
-
   }
 
 
@@ -235,8 +231,8 @@ public class PyramidSolitaireTextualController implements PyramidSolitaireContro
     // keeps running until valid input
     while (true) {
 
-      if(!scanner.hasNext()){
-          throw new IllegalStateException("Readable object unable to provide more inputs");
+      if (!scanner.hasNext()) {
+        throw new IllegalStateException("Readable object unable to provide more inputs");
       }
 
       // upper or lowercase Q is valid
@@ -263,13 +259,13 @@ public class PyramidSolitaireTextualController implements PyramidSolitaireContro
 
   }
 
-  private boolean remove1Command(Scanner scanner,PyramidSolitaireModel model) {
+  private boolean remove1Command(Scanner scanner, PyramidSolitaireModel model) {
 
     int row;
     int card;
 
     String fieldInput = ignoreInvalidInputOrQuit(scanner);
-    if(fieldInput.equals("quit")){
+    if (fieldInput.equals("quit")) {
       return true;
     } else {
       // otherwise the row input is the next int
@@ -277,7 +273,7 @@ public class PyramidSolitaireTextualController implements PyramidSolitaireContro
     }
 
     fieldInput = ignoreInvalidInputOrQuit(scanner);
-    if(fieldInput.equals("quit")){
+    if (fieldInput.equals("quit")) {
       return true;
     } else {
       // otherwise the row input is the next int
@@ -301,11 +297,10 @@ public class PyramidSolitaireTextualController implements PyramidSolitaireContro
     return false;
   }
 
-  private boolean remove2Command(Scanner scanner,PyramidSolitaireModel model){
+  private boolean remove2Command(Scanner scanner, PyramidSolitaireModel model) {
 
     // Remove 2 cards from pyramid (add to 13)
     // INPUTS: 4
-
 
     int row1;
     int row2;
@@ -315,7 +310,7 @@ public class PyramidSolitaireTextualController implements PyramidSolitaireContro
     // skip bogus inputs
 
     String fieldInput = ignoreInvalidInputOrQuit(scanner);
-    if(fieldInput.equals("quit")){
+    if (fieldInput.equals("quit")) {
       return true;
     } else {
       // otherwise the row input is the next int
@@ -323,16 +318,15 @@ public class PyramidSolitaireTextualController implements PyramidSolitaireContro
     }
 
     fieldInput = ignoreInvalidInputOrQuit(scanner);
-    if(fieldInput.equals("quit")){
+    if (fieldInput.equals("quit")) {
       return true;
     } else {
       // otherwise the row input is the next int
       card1 = Integer.parseInt(fieldInput);
     }
 
-
     fieldInput = ignoreInvalidInputOrQuit(scanner);
-    if(fieldInput.equals("quit")){
+    if (fieldInput.equals("quit")) {
       return true;
     } else {
       // otherwise the row input is the next int
@@ -340,7 +334,7 @@ public class PyramidSolitaireTextualController implements PyramidSolitaireContro
     }
 
     fieldInput = ignoreInvalidInputOrQuit(scanner);
-    if(fieldInput.equals("quit")){
+    if (fieldInput.equals("quit")) {
       return true;
     } else {
       // otherwise the row input is the next int
@@ -349,7 +343,7 @@ public class PyramidSolitaireTextualController implements PyramidSolitaireContro
 
     // try to run the code on the model with the input row and card indexed to 1
     try {
-      model.remove(row1 - 1, card1 - 1,row2 - 1, card2 - 1);
+      model.remove(row1 - 1, card1 - 1, row2 - 1, card2 - 1);
 
     } catch (IllegalArgumentException | IllegalStateException e) {
       try {
@@ -364,23 +358,22 @@ public class PyramidSolitaireTextualController implements PyramidSolitaireContro
     return false;
   }
 
-  private boolean removeDrawCommand(Scanner scanner,PyramidSolitaireModel model) {
+  private boolean removeDrawCommand(Scanner scanner, PyramidSolitaireModel model) {
 
     int drawIndex3;
     int row3;
     int card3;
 
     String fieldInput = ignoreInvalidInputOrQuit(scanner);
-    if(fieldInput.equals("quit")){
+    if (fieldInput.equals("quit")) {
       return true;
     } else {
       // otherwise the row input is the next int
       drawIndex3 = Integer.parseInt(fieldInput);
     }
 
-
     fieldInput = ignoreInvalidInputOrQuit(scanner);
-    if(fieldInput.equals("quit")){
+    if (fieldInput.equals("quit")) {
       return true;
     } else {
       // otherwise the row input is the next int
@@ -388,17 +381,16 @@ public class PyramidSolitaireTextualController implements PyramidSolitaireContro
     }
 
     fieldInput = ignoreInvalidInputOrQuit(scanner);
-    if(fieldInput.equals("quit")){
+    if (fieldInput.equals("quit")) {
       return true;
     } else {
       // otherwise the row input is the next int
       card3 = Integer.parseInt(fieldInput);
     }
 
-
     // try to run the code on the model with the input drawIndex/row/card indexed to 1
     try {
-      model.removeUsingDraw(drawIndex3 - 1,row3 - 1, card3 - 1);
+      model.removeUsingDraw(drawIndex3 - 1, row3 - 1, card3 - 1);
 
     } catch (IllegalArgumentException | IllegalStateException e) {
       try {
@@ -413,18 +405,17 @@ public class PyramidSolitaireTextualController implements PyramidSolitaireContro
     return false;
   }
 
-  private boolean discardDrawCommand(Scanner scanner,PyramidSolitaireModel model) {
+  private boolean discardDrawCommand(Scanner scanner, PyramidSolitaireModel model) {
 
     int drawIndex;
 
     String fieldInput = ignoreInvalidInputOrQuit(scanner);
-    if(fieldInput.equals("quit")){
+    if (fieldInput.equals("quit")) {
       return true;
     } else {
       // otherwise the row input is the next int
       drawIndex = Integer.parseInt(fieldInput);
     }
-
 
     // try to run the code on the model with the input drawIndex indexed to 1
     try {
@@ -438,8 +429,6 @@ public class PyramidSolitaireTextualController implements PyramidSolitaireContro
       }
       e.printStackTrace();
     }
-
-
 
     return false;
   }

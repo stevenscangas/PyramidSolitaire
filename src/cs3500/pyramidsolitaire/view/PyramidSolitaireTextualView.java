@@ -27,7 +27,7 @@ public class PyramidSolitaireTextualView implements PyramidSolitaireView {
    *
    * @param model Represents the inner-workings of the solitaire game. Returns a
    *              PyramidSolitaireTextualView corresponding to the game model.
-   * @param out Appendable that represents the visual representation of the board.
+   * @param out   Appendable that represents the visual representation of the board.
    */
   public PyramidSolitaireTextualView(PyramidSolitaireModel<?> model, Appendable out) {
     this.model = model;
@@ -72,7 +72,7 @@ public class PyramidSolitaireTextualView implements PyramidSolitaireView {
 
         gameBoardAsText.append(rowPadding);
 
-        for (int j = 0; j < i + 1; j++) {
+        for (int j = 0; j < model.getRowWidth(i); j++) {
           String cardString;
           if (model.getCardAt(i, j) == null) {
             cardString = ".";

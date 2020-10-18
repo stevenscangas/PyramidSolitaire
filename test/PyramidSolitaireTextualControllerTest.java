@@ -1,32 +1,23 @@
+import static org.junit.Assert.assertEquals;
+
 import cs3500.pyramidsolitaire.controller.PyramidSolitaireController;
 import cs3500.pyramidsolitaire.controller.PyramidSolitaireTextualController;
 import cs3500.pyramidsolitaire.model.hw02.BasicPyramidSolitaire;
 import cs3500.pyramidsolitaire.model.hw02.Card;
 import cs3500.pyramidsolitaire.model.hw02.FakeModel;
 import cs3500.pyramidsolitaire.model.hw02.PyramidSolitaireModel;
-import cs3500.pyramidsolitaire.view.PyramidSolitaireTextualView;
-import java.io.IOException;
 import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.NoSuchElementException;
-import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-
+/**
+ * Class to hold all tests for the controller.
+ */
 public class PyramidSolitaireTextualControllerTest {
 
   PyramidSolitaireModel model;
   PyramidSolitaireController controller;
   StringReader in;
   StringBuilder out;
-
-  @Before
-  public void setUp() throws Exception {
-    //  model = new FakeModel(out);
-  }
 
   ////////////////////////////////////////////////////////////////////////////
 
@@ -109,6 +100,9 @@ public class PyramidSolitaireTextualControllerTest {
     controller = new PyramidSolitaireTextualController(
         new StringReader("rm2 7 5 7 1 q"), System.out);
     controller.playGame(model, model.getDeck(), false, 7, 3);
+
+    // sees if draw cards were reset
+    assertEquals(model.getDrawCards().get(0), new Card(8, "clubs"));
 
   }
 
@@ -323,8 +317,8 @@ public class PyramidSolitaireTextualControllerTest {
     out = new StringBuilder();
 
     model = new FakeModel(out);
-    controller = new PyramidSolitaireTextualController(new StringReader
-        ("rm1 xx five 1 5 q"), out);
+    controller = new
+        PyramidSolitaireTextualController(new StringReader("rm1 xx five 1 5 q"), out);
     controller.playGame(model, model.getDeck(),
         false, 1, 0);
     assertEquals("A♣\n"
@@ -373,17 +367,18 @@ public class PyramidSolitaireTextualControllerTest {
     controller.playGame(model, model.getDeck(),
         false, 1, 0);
     assertEquals("A♣\n"
-        + "Draw:\n"
-        + "Score: 1\n"
-        + "rm1 0 1\n"
-        + "A♣\n"
-        + "Draw:\n"
-        + "Score: 1\n"
-        + "Game quit!\n"
-        + "State of game when quit:\n"
-        + "A♣\n"
-        + "Draw:\n"
-        + "Score: 1", out.toString());
+            + "Draw:\n"
+            + "Score: 1\n"
+            + "rm1 0 1\n"
+            + "A♣\n"
+            + "Draw:\n"
+            + "Score: 1\n"
+            + "Game quit!\n"
+            + "State of game when quit:\n"
+            + "A♣\n"
+            + "Draw:\n"
+            + "Score: 1",
+        out.toString());
   }
 
   // controller should throw an exception because there is nothing left for it to read
@@ -419,8 +414,8 @@ public class PyramidSolitaireTextualControllerTest {
     out = new StringBuilder();
 
     model = new FakeModel(out);
-    controller = new PyramidSolitaireTextualController(
-        new StringReader("rm2 100 -2 -1 -1 q"), out);
+    controller = new PyramidSolitaireTextualController(new StringReader("rm2 100 -2 -1 -1 q")
+        , out);
     controller.playGame(model, model.getDeck(),
         false, 1, 0);
     assertEquals("A♣\n"
@@ -445,8 +440,8 @@ public class PyramidSolitaireTextualControllerTest {
     out = new StringBuilder();
 
     model = new FakeModel(out);
-    controller = new PyramidSolitaireTextualController(new StringReader
-        ("rm2 xx five 1 5 1 7 q"), out);
+    controller = new PyramidSolitaireTextualController(new StringReader("rm2 xx five 1 5 1 7 q")
+        , out);
     controller.playGame(model, model.getDeck(),
         false, 1, 0);
     assertEquals("A♣\n"
@@ -607,8 +602,8 @@ public class PyramidSolitaireTextualControllerTest {
     out = new StringBuilder();
 
     model = new FakeModel(out);
-    controller = new PyramidSolitaireTextualController(new StringReader
-        ("rmwd xx five 1 1 5 q"), out);
+    controller = new PyramidSolitaireTextualController(new StringReader("rmwd xx five 1 1 5 q"),
+        out);
     controller.playGame(model, model.getDeck(),
         false, 1, 0);
     assertEquals("A♣\n"
@@ -747,8 +742,8 @@ public class PyramidSolitaireTextualControllerTest {
     out = new StringBuilder();
 
     model = new FakeModel(out);
-    controller = new PyramidSolitaireTextualController(new StringReader
-        ("dd xx five 1 q"), out);
+    controller = new PyramidSolitaireTextualController(new StringReader("dd xx five 1 q"),
+        out);
     controller.playGame(model, model.getDeck(),
         false, 1, 0);
     assertEquals("A♣\n"
@@ -838,8 +833,8 @@ public class PyramidSolitaireTextualControllerTest {
     out = new StringBuilder();
 
     model = new FakeModel(out);
-    controller = new PyramidSolitaireTextualController(new StringReader
-        ("dd rm1 rm2 rmwd dd dknf sdjksdjks wq wq 1 q"), out);
+    controller = new PyramidSolitaireTextualController(new StringReader("dd rm1 rm2 rmwd dd "
+        + "dknf sdjksdjks wq wq 1 q"), out);
     controller.playGame(model, model.getDeck(),
         false, 1, 0);
     assertEquals("A♣\n"
@@ -870,8 +865,8 @@ public class PyramidSolitaireTextualControllerTest {
     out = new StringBuilder();
 
     model = new FakeModel(out);
-    controller = new PyramidSolitaireTextualController(new StringReader
-        ("dd \n \n  n \n dd \n \n dd     1 q"), out);
+    controller = new PyramidSolitaireTextualController(new StringReader("dd \n \n  n \n dd "
+        + "\n \n dd     1 q"), out);
     controller.playGame(model, model.getDeck(),
         false, 1, 0);
     assertEquals("A♣\n"
@@ -899,8 +894,7 @@ public class PyramidSolitaireTextualControllerTest {
 
     model = new BasicPyramidSolitaire(1);
 
-    controller = new PyramidSolitaireTextualController(new StringReader
-        ("rmwd 6 1 1"), out);
+    controller = new PyramidSolitaireTextualController(new StringReader("rmwd 6 1 1"), out);
 
     controller.playGame(model, model.getDeck(),
         true, 1, 20);
@@ -919,8 +913,8 @@ public class PyramidSolitaireTextualControllerTest {
 
     model = new BasicPyramidSolitaire(1);
 
-    controller = new PyramidSolitaireTextualController(new StringReader
-        ("rm1 1 1"), out);
+    controller = new PyramidSolitaireTextualController(new StringReader("rm1 1 1"),
+        out);
 
     controller.playGame(model, model.getDeck(),
         true, 1, 0);

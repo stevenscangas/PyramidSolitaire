@@ -99,7 +99,6 @@ public class Card {
             + "possible suit options: Spades, Diamonds, Hearts, Clubs");
     }
 
-
     // return the value of the card combined with the suit afterwards
     // Examples: A♠, J♦, 5♥
     return displayValue.concat(displaySuit);
