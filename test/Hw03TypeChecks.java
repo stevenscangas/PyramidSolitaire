@@ -1,3 +1,5 @@
+import cs3500.pyramidsolitaire.model.hw02.BasicPyramidSolitaire;
+import cs3500.pyramidsolitaire.model.hw02.PyramidSolitaireModel;
 import java.io.StringReader;
 
 /**
@@ -13,12 +15,12 @@ public class Hw03TypeChecks {
   public static void main(String[] args) {
     Readable rd = new StringReader("");
     Appendable ap = new StringBuilder();
-    helper(new cs3500.pyramidsolitaire.model.hw02.BasicPyramidSolitaire(),
+    helper(new BasicPyramidSolitaire(),
         new cs3500.pyramidsolitaire.controller.PyramidSolitaireTextualController(rd, ap));
   }
 
   private static <K> void helper(
-      cs3500.pyramidsolitaire.model.hw02.PyramidSolitaireModel<K> model,
+      PyramidSolitaireModel<K> model,
       cs3500.pyramidsolitaire.controller.PyramidSolitaireController controller) {
     controller.playGame(model, model.getDeck(), false, 7, 4);
   }

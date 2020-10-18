@@ -87,7 +87,7 @@ public class PyramidSolitaireTextualView implements PyramidSolitaireView {
             }
           }
 
-          if (!(model.getRowWidth(i) == j || 0 == j)) {
+          if (!(model.getRowWidth(i) <= j || 0 >= j)) {
             gameBoardAsText.append(" ");
           }
           gameBoardAsText.append(cardString);

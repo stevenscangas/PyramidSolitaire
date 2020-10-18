@@ -1,11 +1,11 @@
-package cs3500.pyramidsolitaire.model.hw02;
+package cs3500.pyramidsolitaire.model.hw04;
 
+import cs3500.pyramidsolitaire.model.hw02.BasicPyramidSolitaire;
+import cs3500.pyramidsolitaire.model.hw02.Card;
+import cs3500.pyramidsolitaire.model.hw02.GameStatus;
+import cs3500.pyramidsolitaire.model.hw02.PyramidSolitaireModel;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
-import java.util.Random;
-import java.util.Set;
 
 /**
  * The model for playing a game of Pyramid Solitaire: this maintains the state and enforces the
@@ -353,45 +353,7 @@ public class RelaxedPyramidSolitaire extends BasicPyramidSolitaire
     return super.getDrawCards();
   }
 
-  /**
-   * Determines whether or not the specified cell in the pyramid is exposed. This means that there
-   * are no non-removed cards below it on the left or right.
-   *
-   * @param row  row of card to check if exposed
-   * @param card which card in the row to check if exposed
-   * @return whether or not this cell is exposed
-   * @throws IllegalStateException    if the game hasn't been started yet
-   * @throws IllegalArgumentException if card is not within bounds of pyramid
-   */
-  // method to check if card at the input position is exposed
-  private boolean isCellExposed(int row, int card) {
 
-    // throw exception if game has not started
-    if (gameStatus == GameStatus.NOTSTARTED) {
-      throw new IllegalStateException("Game has not been started yet.");
-    }
-
-    // check bounds of row and card parameters, throw exception if out of bounds of pyramid
-    if (row > getNumRows() - 1 || row < 0 || card >= getRowWidth(row) || card < 0) {
-      throw new IllegalArgumentException("Either the card or row is not within the bounds"
-          + " of the card pyramid.");
-    }
-
-    // case if this cell is in the bottom row of the pyramid, always true
-    if (row >= getNumRows() - 1) {
-      return true;
-    }
-
-    // case if at least one of the cells below this one is not exposed
-    if (getCardAt(row + 1, card) != null
-        || getCardAt(row + 1, card + 1) != null) {
-      return false;
-    }
-
-    // case if both cells below this one are exposed
-    return (getCardAt(row + 1, card) == null)
-        && (getCardAt(row + 1, card + 1) == null);
-  }
 
   // method to check if two cards on top of each other are in a pair
   private boolean isExposedPair(int row1, int card1, int row2, int card2) {

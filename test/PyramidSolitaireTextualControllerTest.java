@@ -4,7 +4,7 @@ import cs3500.pyramidsolitaire.controller.PyramidSolitaireController;
 import cs3500.pyramidsolitaire.controller.PyramidSolitaireTextualController;
 import cs3500.pyramidsolitaire.model.hw02.BasicPyramidSolitaire;
 import cs3500.pyramidsolitaire.model.hw02.Card;
-import cs3500.pyramidsolitaire.model.hw02.FakeModel;
+import cs3500.pyramidsolitaire.model.hw04.FakeModel;
 import cs3500.pyramidsolitaire.model.hw02.PyramidSolitaireModel;
 import java.io.StringReader;
 import org.junit.Test;

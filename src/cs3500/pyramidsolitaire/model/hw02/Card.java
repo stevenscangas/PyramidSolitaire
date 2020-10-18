@@ -2,7 +2,7 @@ package cs3500.pyramidsolitaire.model.hw02;
 
 import java.util.Objects;
 
-// class to represent a card in the PyramidSolitaire game
+// class to represent a card in the cs3500.pyramidsolitaire.PyramidSolitaire game
 
 /**
  * A class to represent a Card in the game. value: Integer to represent value of card. 1-13 if

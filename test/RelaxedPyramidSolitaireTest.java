@@ -1,8 +1,6 @@
-import cs3500.pyramidsolitaire.model.hw02.BasicPyramidSolitaire;
 import cs3500.pyramidsolitaire.model.hw02.Card;
-import cs3500.pyramidsolitaire.model.hw02.NotAbstractedRelaxed;
 import cs3500.pyramidsolitaire.model.hw02.PyramidSolitaireModel;
-import cs3500.pyramidsolitaire.model.hw02.RelaxedPyramidSolitaire;
+import cs3500.pyramidsolitaire.model.hw04.RelaxedPyramidSolitaire;
 import org.junit.Test;
 import cs3500.pyramidsolitaire.view.PyramidSolitaireTextualView;
 

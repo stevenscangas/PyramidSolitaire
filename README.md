@@ -1,4 +1,4 @@
-# PyramidSolitaire
+# cs3500.pyramidsolitaire.PyramidSolitaire
 project for object oriented design class
 
 Please run this program through the main class in OODHW3/src/cs3500/pyramidsolitaire/controller/ Main

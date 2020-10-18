@@ -1,3 +1,5 @@
+import cs3500.pyramidsolitaire.model.hw02.BasicPyramidSolitaire;
+import cs3500.pyramidsolitaire.model.hw02.PyramidSolitaireModel;
 import java.util.List;
 
 /**
@@ -11,11 +13,11 @@ public class Hw02TypeChecks {
    * compiles properly.
    */
   public static void main(String[] args) {
-    helper(new cs3500.pyramidsolitaire.model.hw02.BasicPyramidSolitaire());
+    helper(new BasicPyramidSolitaire());
   }
 
   private static <K> void helper(
-      cs3500.pyramidsolitaire.model.hw02.PyramidSolitaireModel<K> model) {
+      PyramidSolitaireModel<K> model) {
     cs3500.pyramidsolitaire.view.PyramidSolitaireTextualView view =
         new cs3500.pyramidsolitaire.view.PyramidSolitaireTextualView(model);
 

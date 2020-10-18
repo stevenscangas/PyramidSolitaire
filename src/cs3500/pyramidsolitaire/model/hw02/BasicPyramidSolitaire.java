@@ -243,12 +243,6 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
     }
 
 
-    // if these cards are an exposed pair, remove them
-    if (isExposedPair(row1, card1, row2, card2)) {
-      pyramidArray.get(row1).set(card1, null);
-      pyramidArray.get(row2).set(card2, null);
-    }
-
     // see if both cards are exposed, if so, continue
     if (!isCellExposed(row1, card1) || !isCellExposed(row2, card2)) {
       throw new IllegalArgumentException("One or both of these cards is not exposed.");
@@ -553,30 +547,11 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
       }
     }
 
-    // check if any two cards on the pyramid form an exposed pair
-    // for every exposed cell we find, check if the card in there forms a pair with
-    // either of the two cards above it
-
-    // iterate through each row of pyramid 2D array
-    for (int row = 0; row < gottenNumRows; row++) {
-      // iterate through each individual card in this row
-      for (int cardNum = 0; cardNum <= getRowWidth(row) - 1; cardNum++) {
-
-        // if cell is exposed, check if card in there forms a pair
-        if (getCardAt(row, cardNum) != null && isCellExposed(row, cardNum)) {
-
-          if(isExposedPair(row,cardNum,row-1,cardNum)
-              || isExposedPair(row,cardNum,row-1,cardNum+1)){
-            exposedPairExists = true;
-          }
-        }
-      }
-    }
 
 
     // game not over until there are no combinations AND no cards left in stock to use
 
-    if (pyramidMatchExists || drawMatchExists || exposedPairExists) {
+    if (pyramidMatchExists || drawMatchExists) {
       return false;
     }
     if (getNumDraw() == 0) {
@@ -694,7 +669,7 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
    * @throws IllegalArgumentException if card is not within bounds of pyramid
    */
   // method to check if card at the input position is exposed
-  private boolean isCellExposed(int row, int card) {
+  protected boolean isCellExposed(int row, int card) {
 
     // throw exception if game has not started
     if (gameStatus == GameStatus.NOTSTARTED) {
@@ -723,65 +698,5 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
         && (getCardAt(row + 1, card + 1) == null);
   }
 
-  // method to check if two cards on top of each other are in a pair
-  private boolean isExposedPair(int row1, int card1, int row2, int card2) {
-
-    // throw exception since game hasn't started
-    if (gameStatus == GameStatus.NOTSTARTED) {
-      throw new IllegalStateException("Game has not been started yet.");
-    }
-
-    // check bounds of all row and card parameters, throw exception if out of bounds of pyramid
-    if (row1 > getNumRows() - 1 || row2 > getNumRows() - 1) {
-      return false;
-    }
-
-    // check bounds of all row and card parameters, throw exception if out of bounds of pyramid
-    if (card1 > getRowWidth(row1) - 1 || card2 > getRowWidth(row2) - 1) {
-      return false;
-    }
-
-    // false if cards don't add to 13
-    if (getCardAt(row1, card1).getValue() + getCardAt(row2, card2).getValue() != 13) {
-      return false;
-    }
-
-    // check if row difference is not exactly 1
-    if (Math.abs(row1 - row2) != 1) {
-      return false;
-    }
-
-    // REMOVE TWO CARDS AS A PAIR CASE 2
-
-    // if row1 greater than row2
-    if (row1 < row2) {
-
-      // is bottom card exposed?
-      if (isCellExposed(row2, card2)) {
-
-        // if card2 is below to the left or below to the right of card1
-        if (card1 == card2 || card1 == card2 + 1) {
-
-          return true;
-        }
-      }
-    }
-
-    // REMOVE TWO CARDS AS A PAIR CASE 2
-
-    // if row1 greater than row2
-    if (row1 > row2) {
-
-      // is bottom card exposed?
-      if (isCellExposed(row1, card1)) {
-
-        // if card2 is below to the left or below to the right of card1
-        if (card1 == card2 || card2 == card1 + 1) {
-          return true;
-        }
-      }
-    }
-    return false;
-  }
 
 }

@@ -1,5 +1,8 @@
-package cs3500.pyramidsolitaire.model.hw02;
+package cs3500.pyramidsolitaire.model.hw04;
 
+import cs3500.pyramidsolitaire.model.hw02.Card;
+import cs3500.pyramidsolitaire.model.hw02.GameStatus;
+import cs3500.pyramidsolitaire.model.hw02.PyramidSolitaireModel;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
