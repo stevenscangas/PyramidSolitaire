@@ -227,6 +227,7 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
     }
 
     // check bounds of all row and card parameters, throw exception if out of bounds of pyramid
+    // <= row was changed to getRowWidth(row) in order to allow for abstraction
     if (card1 > getRowWidth(row1) - 1 || card2 > getRowWidth(row2)) {
       throw new IllegalArgumentException("One of the cards is not within horizontal bounds.");
     }
@@ -502,6 +503,7 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
     // iterate through each row of pyramid 2D array
     for (int row = 0; row < gottenNumRows; row++) {
       // iterate through each individual card in this row
+      // replaced math of this for loop to use getRowWidth instead of assuming pyramid shape
       for (int cardNum = 0; cardNum <= getRowWidth(row) - 1; cardNum++) {
         // check if this card is exposed and not removed yet
         Card currentCard = getCardAt(row, cardNum);
@@ -617,6 +619,7 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
       throw new IllegalArgumentException("Row number less than 0 or greater than number rows.");
     }
 
+    // <= row was changed to getRowWidth(row) in order to allow for abstraction
     if (card < 0 || card > getRowWidth(row) - 1) {
       throw new IllegalArgumentException("Card number less than 0 or greater than number of"
           + "cards in that row.");
@@ -673,6 +676,7 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
     }
 
     // check bounds of row and card parameters, throw exception if out of bounds of pyramid
+    // <= row was changed to getRowWidth(row) in order to allow for abstraction
     if (row > getNumRows() - 1 || row < 0 || card > getRowWidth(row) - 1 || card < 0) {
       throw new IllegalArgumentException("Either the card or row is not within the bounds"
           + " of the card pyramid.");
@@ -695,8 +699,8 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
   }
 
   /**
-   * Determines whether or not this PyramidSolitaire is equal to an input PyramidSolitaire.
-   * To be equal, the two PyramidSolitaires must only be of the same class.
+   * Determines whether or not this PyramidSolitaire is equal to an input PyramidSolitaire. To be
+   * equal, the two PyramidSolitaires must only be of the same class.
    */
   public boolean isEqual(PyramidSolitaireModel<Card> other) {
     return other.getClass() == this.getClass();

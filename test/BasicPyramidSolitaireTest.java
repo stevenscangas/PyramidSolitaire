@@ -1,5 +1,7 @@
 import cs3500.pyramidsolitaire.model.hw02.BasicPyramidSolitaire;
 import cs3500.pyramidsolitaire.model.hw02.Card;
+import cs3500.pyramidsolitaire.model.hw04.MultiPyramidSolitaire;
+import cs3500.pyramidsolitaire.model.hw04.RelaxedPyramidSolitaire;
 import org.junit.Test;
 import cs3500.pyramidsolitaire.view.PyramidSolitaireTextualView;
 
@@ -1121,6 +1123,106 @@ public class BasicPyramidSolitaireTest {
     assertEquals(notRandomSolitaireTextualView.toString(), "");
 
   }
+
+  // see if game can correctly switch from Basic to Multi if startgame called
+  @Test
+  public void testSwitchGameFromMulti() {
+
+    notRandomSolitaire = new MultiPyramidSolitaire();
+
+    notRandomSolitaire.startGame(
+        notRandomSolitaire.getDeck(), false, 7, 3);
+
+    PyramidSolitaireTextualView notRandomSolitaireTextualView =
+        new PyramidSolitaireTextualView(notRandomSolitaire);
+
+    System.out.println(notRandomSolitaireTextualView.toString());
+
+    assertEquals(notRandomSolitaireTextualView.toString(),
+        "            A♣  .   .   A♦  .   .   A♥\n"
+            + "          A♠  2♣  .   2♦  2♥  .   2♠  3♣\n"
+            + "        3♦  3♥  3♠  4♣  4♦  4♥  4♠  5♣  5♦\n"
+            + "      5♥  5♠  6♣  6♦  6♥  6♠  7♣  7♦  7♥  7♠\n"
+            + "    8♣  8♦  8♥  8♠  9♣  9♦  9♥  9♠  10♣ 10♦ 10♥\n"
+            + "  10♠ J♣  J♦  J♥  J♠  Q♣  Q♦  Q♥  Q♠  K♣  K♦  K♥\n"
+            + "K♠  A♣  A♦  A♥  A♠  2♣  2♦  2♥  2♠  3♣  3♦  3♥  3♠\n"
+            + "Draw: 4♣, 4♦, 4♥");
+
+    notRandomSolitaire = new BasicPyramidSolitaire();
+
+    notRandomSolitaire.startGame(
+        notRandomSolitaire.getDeck(), false, 7, 3);
+
+    notRandomSolitaireTextualView =
+        new PyramidSolitaireTextualView(notRandomSolitaire);
+
+    System.out.println(notRandomSolitaireTextualView.toString());
+
+    assertEquals(notRandomSolitaireTextualView.toString(),
+        "            A♣\n"
+            + "          A♦  A♥\n"
+            + "        A♠  2♣  2♦\n"
+            + "      2♥  2♠  3♣  3♦\n"
+            + "    3♥  3♠  4♣  4♦  4♥\n"
+            + "  4♠  5♣  5♦  5♥  5♠  6♣\n"
+            + "6♦  6♥  6♠  7♣  7♦  7♥  7♠\n"
+            + "Draw: 8♣, 8♦, 8♥");
+
+
+
+
+  }
+
+  @Test
+  public void testSwitchGameFromRelaxed() {
+
+    notRandomSolitaire = new RelaxedPyramidSolitaire();
+
+    notRandomSolitaire.startGame(
+        notRandomSolitaire.getDeck(), false, 7, 3);
+
+    PyramidSolitaireTextualView notRandomSolitaireTextualView =
+        new PyramidSolitaireTextualView(notRandomSolitaire);
+
+    System.out.println(notRandomSolitaireTextualView.toString());
+
+    assertEquals(notRandomSolitaireTextualView.toString(),
+        "            A♣\n"
+            + "          A♦  A♥\n"
+            + "        A♠  2♣  2♦\n"
+            + "      2♥  2♠  3♣  3♦\n"
+            + "    3♥  3♠  4♣  4♦  4♥\n"
+            + "  4♠  5♣  5♦  5♥  5♠  6♣\n"
+            + "6♦  6♥  6♠  7♣  7♦  7♥  7♠\n"
+            + "Draw: 8♣, 8♦, 8♥");
+
+    notRandomSolitaire = new BasicPyramidSolitaire();
+
+    notRandomSolitaire.startGame(
+        notRandomSolitaire.getDeck(), false, 7, 3);
+
+    notRandomSolitaireTextualView =
+        new PyramidSolitaireTextualView(notRandomSolitaire);
+
+    System.out.println(notRandomSolitaireTextualView.toString());
+
+    assertEquals(notRandomSolitaireTextualView.toString(),
+        "            A♣\n"
+            + "          A♦  A♥\n"
+            + "        A♠  2♣  2♦\n"
+            + "      2♥  2♠  3♣  3♦\n"
+            + "    3♥  3♠  4♣  4♦  4♥\n"
+            + "  4♠  5♣  5♦  5♥  5♠  6♣\n"
+            + "6♦  6♥  6♠  7♣  7♦  7♥  7♠\n"
+            + "Draw: 8♣, 8♦, 8♥");
+
+
+
+
+  }
+
+
+
 
 
 }

@@ -17,6 +17,7 @@ public final class PyramidSolitaire {
    */
   public static void main(String[] args) {
 
+    // default values
     int rowNum = 7;
     int drawNum = 3;
     GameType gameMode = GameType.BASIC;
@@ -43,6 +44,7 @@ public final class PyramidSolitaire {
             + "Types are cAsE sEnSitive.");
     }
 
+    // change rows and drawnum if 3 arguments
     if (numArgs == 3) {
       rowNum = Integer.parseInt(args[1]);
       drawNum = Integer.parseInt(args[2]);

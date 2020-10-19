@@ -1,0 +1,1 @@
+Removed every instance of using rows number to determine number of cards in row in BasicPyramidSolitaire. Replaced these with GetRowWidth() so that the pyrmaid design could be abstracted for the multipyramid.
