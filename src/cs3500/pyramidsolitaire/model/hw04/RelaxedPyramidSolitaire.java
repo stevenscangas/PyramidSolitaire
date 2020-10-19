@@ -271,6 +271,7 @@ public class RelaxedPyramidSolitaire extends BasicPyramidSolitaire
 
     boolean pyramidMatchExists = false;
     boolean drawMatchExists = false;
+    boolean exposedPairExists = false;
 
     // now check every card in the exposed list against every other card
     // in it to see if any add up to 13
@@ -301,9 +302,31 @@ public class RelaxedPyramidSolitaire extends BasicPyramidSolitaire
         }
       }
     }
+
+    // check if any two cards on the pyramid form an exposed pair
+    // for every exposed cell we find, check if the card in there forms a pair with
+    // either of the two cards above it
+
+    // iterate through each row of pyramid 2D array
+    for (int row = 0; row < gottenNumRows; row++) {
+      // iterate through each individual card in this row
+      for (int cardNum = 0; cardNum <= getRowWidth(row) - 1; cardNum++) {
+
+        // if cell is exposed, check if card in there forms a pair
+        if (getCardAt(row, cardNum) != null && isCellExposed(row, cardNum)) {
+
+          if ((row - 1 >= 0 && (isExposedPair(row, cardNum, row - 1, cardNum)))
+              || (((row - 1 >= 0) && (cardNum - 1 >= 0))
+              && isExposedPair(row, cardNum, row - 1, cardNum - 1))) {
+            exposedPairExists = true;
+          }
+        }
+      }
+    }
+
     // game not over until there are no combinations AND no cards left in stock to use
 
-    if (pyramidMatchExists || drawMatchExists) {
+    if (pyramidMatchExists || drawMatchExists || exposedPairExists) {
       return false;
     }
     if (getNumDraw() == 0) {
@@ -354,7 +377,6 @@ public class RelaxedPyramidSolitaire extends BasicPyramidSolitaire
   }
 
 
-
   // method to check if two cards on top of each other are in a pair
   private boolean isExposedPair(int row1, int card1, int row2, int card2) {
 
@@ -392,7 +414,7 @@ public class RelaxedPyramidSolitaire extends BasicPyramidSolitaire
       if (isCellExposed(row2, card2)) {
 
         // if card2 is below to the left or below to the right of card1
-        if (card1 == card2 || card1 == card2 + 1) {
+        if (card1 == card2 || card1 == card2 - 1) {
 
           return true;
         }
@@ -408,7 +430,7 @@ public class RelaxedPyramidSolitaire extends BasicPyramidSolitaire
       if (isCellExposed(row1, card1)) {
 
         // if card2 is below to the left or below to the right of card1
-        if (card1 == card2 || card2 == card1 + 1) {
+        if (card1 == card2 || card2 == card1 - 1) {
           return true;
         }
       }

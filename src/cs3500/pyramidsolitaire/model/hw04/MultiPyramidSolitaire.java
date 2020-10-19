@@ -120,31 +120,24 @@ public class MultiPyramidSolitaire extends BasicPyramidSolitaire
       throw new IllegalArgumentException("Number of cards in draw pile cannot be negative.");
     }
 
-
-
-
     if (deck.contains(null)) {
       throw new IllegalArgumentException("Deck has one or more null cards. Invalid Deck.");
     }
-
 
     // clear stock to reset game
     stockList.clear();
     // add two decks to stocklist
     stockList.addAll(deck);
 
-
     // make sure there is exactly 2 of each card in the deck, no less or no more
-    for(Card currentCard: stockList){
-      if(Collections.frequency(stockList,currentCard) != 2){
+    for (Card currentCard : stockList) {
+      if (Collections.frequency(stockList, currentCard) != 2) {
         throw new IllegalArgumentException("Double-Deck does not contain exactly 1 duplicate "
             + "of each card.");
       }
     }
 
-
     // MATH FOR CREATING MULTI PYRAMID GOES HERE
-
 
     // number of rows that overlap among the 3 pyramids
     int overlap;
@@ -162,8 +155,8 @@ public class MultiPyramidSolitaire extends BasicPyramidSolitaire
     int incompleteRows;
 
     // case where rows is even
-    if(numRows % 2 == 0){
-      overlap = numRows/2;
+    if (numRows % 2 == 0) {
+      overlap = numRows / 2;
       firstRowCards = numRows + 1;
 
       lastRowCards = numRows * 2;
@@ -171,8 +164,8 @@ public class MultiPyramidSolitaire extends BasicPyramidSolitaire
     }
 
     // case where rows is odd
-    else{
-      overlap = numRows/2 + 1;
+    else {
+      overlap = numRows / 2 + 1;
       firstRowCards = numRows;
       lastRowCards = (numRows * 2) - 1;
 
@@ -180,24 +173,41 @@ public class MultiPyramidSolitaire extends BasicPyramidSolitaire
     firstRowNull = (lastRowCards / 2) - 2;
     incompleteRows = numRows - overlap;
 
-
-
-/*
-
-    // calculate total amount of cards needed to deal pyramid and draw pile
     int totalCardsNeeded = 0;
-    for (int v = 1; v <= numRows; v++) {
-      totalCardsNeeded += v;
+
+    // iterate through every incomplete row
+    for (int row = 0; row < incompleteRows; row++) {
+
+      // how big the groups of nulls that need to be added are
+      int nullsNeededToBeAdded = (firstRowNull / 2) - row;
+      // how big the groups of cards that need to be added are
+      int cardsNeededToBeAdded = row + 1;
+
+      // how big the groups of card+null are per row
+      int combinedAdd = nullsNeededToBeAdded + cardsNeededToBeAdded;
+
+      // run each of the card and null loops 3 times per row
+      for (int cycle = 0; cycle < 3; cycle++) {
+
+        // loop that builds the cards
+        for (int cell = 0; cell < cardsNeededToBeAdded; cell++) {
+          totalCardsNeeded++;
+        }
+      }
     }
-    totalCardsNeeded += numDraw;
+
+    // add the cards that overlap, this is the easy part
+    for (int x = incompleteRows; x < numRows; x++) {
+      for (int z = 0; z < firstRowCards + x; z++) {
+        totalCardsNeeded++;
+      }
+    }
 
     // throw exception if need more cards for game than cards exist in deck
     if (totalCardsNeeded > 104) {
       throw new IllegalArgumentException("Number of cards in pyramid & draw pile exceeds"
           + "number of cards in deck: 104");
     }
-*/
-
 
     // SHUFFLE DECK (stock) HERE IF NEEDED
     if (shuffle) {
@@ -222,10 +232,8 @@ public class MultiPyramidSolitaire extends BasicPyramidSolitaire
       pyramidArray.add(new ArrayList<Card>());
     }
 
-
     // iterate through every incomplete row
-    for(int row = 0; row < incompleteRows; row++) {
-
+    for (int row = 0; row < incompleteRows; row++) {
 
       // how big the groups of nulls that need to be added are
       int nullsNeededToBeAdded = (firstRowNull / 2) - row;
@@ -237,7 +245,6 @@ public class MultiPyramidSolitaire extends BasicPyramidSolitaire
 
       // run each of the card and null loops 3 times per row
       for (int cycle = 0; cycle < 3; cycle++) {
-
 
         // loop that builds the cards
         for (int cell = 0; cell < cardsNeededToBeAdded; cell++) {
@@ -255,17 +262,13 @@ public class MultiPyramidSolitaire extends BasicPyramidSolitaire
 
     }
 
-
-
-
     // add the cards that overlap, this is the easy part
-    for( int x = incompleteRows; x < numRows; x++){
-      for(int z = 0; z < firstRowCards + x ; z++){
+    for (int x = incompleteRows; x < numRows; x++) {
+      for (int z = 0; z < firstRowCards + x; z++) {
         pyramidArray.get(x).add(stockList.get(0));
         stockList.remove(0);
       }
     }
-
 
     drawArray = new Card[numDraw];
 
@@ -423,7 +426,7 @@ public class MultiPyramidSolitaire extends BasicPyramidSolitaire
    */
   @Override
   public Card getCardAt(int row, int card) throws IllegalStateException {
-    return super.getCardAt(row,card);
+    return super.getCardAt(row, card);
   }
 
   /**

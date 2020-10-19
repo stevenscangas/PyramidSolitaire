@@ -315,8 +315,16 @@ public class MultiPyramidSolitaireTest {
   // throw exception trying to remove card that is bigger than row size
   @Test(expected = IllegalArgumentException.class)
   public void testRemoveInvalidCard2Greater() {
+
     defaultSolitaire.startGame(standardDeck, false, 7, 3);
-    defaultSolitaire.remove(6, 5, 0, 1);
+
+    PyramidSolitaireTextualView notRandomSolitaireTextualView =
+        new PyramidSolitaireTextualView(notRandomSolitaire);
+
+    System.out.println("Before remove: \n");
+    System.out.println(notRandomSolitaireTextualView.toString());
+
+    defaultSolitaire.remove(6, 5, 0, 10);
   }
 
   // throw exception trying to remove card that is not exposed
@@ -357,11 +365,11 @@ public class MultiPyramidSolitaireTest {
     System.out.println("Before remove: \n");
     System.out.println(pyramidSolitaireTextualView.toString());
 
-    notRandomSolitaire.remove(6, 0, 6, 3);
+    notRandomSolitaire.remove(6, 4, 6, 1);
     System.out.println("After remove: \n");
     System.out.println(pyramidSolitaireTextualView.toString());
-    assertEquals(notRandomSolitaire.getCardAt(6, 0), null);
-    assertEquals(notRandomSolitaire.getCardAt(6, 3), null);
+    assertEquals(notRandomSolitaire.getCardAt(6, 4), null);
+    assertEquals(notRandomSolitaire.getCardAt(6, 1), null);
   }
 
   // TESTS FOR REMOVE CALLED WITH ONLY 1 CARD (KING)
@@ -436,7 +444,7 @@ public class MultiPyramidSolitaireTest {
   @Test(expected = IllegalArgumentException.class)
   public void testRemove1Not13() {
     defaultSolitaire.startGame(standardDeck, false, 7, 3);
-    defaultSolitaire.remove(6, 0);
+    defaultSolitaire.remove(5, 0);
   }
 
   //////////////////////////////////////////////
@@ -489,7 +497,6 @@ public class MultiPyramidSolitaireTest {
   }
 
 
-
   // check if card is not 13 value (not king)
   // throw exception if so
   @Test(expected = IllegalArgumentException.class)
@@ -529,7 +536,7 @@ public class MultiPyramidSolitaireTest {
     System.out.println(notRandomSolitaireTextualView.toString());
     assertEquals(notRandomSolitaire.getCardAt(6, 3), null);
     assertEquals(notRandomSolitaire.getDrawCards().get(2),
-        new Card(8, "diamonds"));
+        new Card(9, "spades"));
   }
 
   ///////////////////////////
@@ -593,7 +600,7 @@ public class MultiPyramidSolitaireTest {
     System.out.println("After remove: \n");
     System.out.println(notRandomSolitaireTextualView.toString());
     assertEquals(notRandomSolitaire.getDrawCards().get(2),
-        new Card(8, "diamonds"));
+        new Card(9, "spades"));
   }
 
   ///////////////
@@ -605,7 +612,7 @@ public class MultiPyramidSolitaireTest {
   public void testIsGameOver() {
     PyramidSolitaireTextualView notRandomSolitaireTextualView =
         new PyramidSolitaireTextualView(notRandomSolitaire);
-    notRandomSolitaire.startGame(standardDeck, true, 9, 3);
+    notRandomSolitaire.startGame(standardDeck, true, 2, 3);
 
     System.out.println("Before remove: \n");
     System.out.println(notRandomSolitaireTextualView.toString());
@@ -635,8 +642,11 @@ public class MultiPyramidSolitaireTest {
   public void testGetNumRows9() {
     PyramidSolitaireTextualView notRandomSolitaireTextualView =
         new PyramidSolitaireTextualView(notRandomSolitaire);
-    notRandomSolitaire.startGame(standardDeck, true, 9, 3);
-    assertEquals(notRandomSolitaire.getNumRows(), 9);
+
+    System.out.println(notRandomSolitaireTextualView.toString());
+
+    notRandomSolitaire.startGame(standardDeck, true, 6, 3);
+    assertEquals(notRandomSolitaire.getNumRows(), 6);
   }
 
   @Test
@@ -655,8 +665,8 @@ public class MultiPyramidSolitaireTest {
   public void testRowWidth4() {
     PyramidSolitaireTextualView notRandomSolitaireTextualView =
         new PyramidSolitaireTextualView(notRandomSolitaire);
-    notRandomSolitaire.startGame(standardDeck, true, 9, 3);
-    assertEquals(notRandomSolitaire.getRowWidth(4), 5);
+    notRandomSolitaire.startGame(standardDeck, true, 7, 3);
+    assertEquals(notRandomSolitaire.getRowWidth(0), 7);
   }
 
   @Test
@@ -737,7 +747,7 @@ public class MultiPyramidSolitaireTest {
         new PyramidSolitaireTextualView(notRandomSolitaire);
     notRandomSolitaire.startGame(standardDeck, true, 3, 3);
     System.out.println(notRandomSolitaireTextualView.toString());
-    assertEquals(notRandomSolitaire.getScore(), 44);
+    assertEquals(notRandomSolitaire.getScore(), 65);
   }
 
   @Test
@@ -747,7 +757,7 @@ public class MultiPyramidSolitaireTest {
         new PyramidSolitaireTextualView(notRandomSolitaire);
     notRandomSolitaire.startGame(standardDeck, true, 1, 3);
     System.out.println(notRandomSolitaireTextualView.toString());
-    assertEquals(notRandomSolitaire.getScore(), 9);
+    assertEquals(notRandomSolitaire.getScore(), 1);
   }
 
 
@@ -756,16 +766,15 @@ public class MultiPyramidSolitaireTest {
   public void testGetScore3Removed() {
     PyramidSolitaireTextualView notRandomSolitaireTextualView =
         new PyramidSolitaireTextualView(notRandomSolitaire);
-    notRandomSolitaire.startGame(standardDeck, true, 3, 3);
+    notRandomSolitaire.startGame(standardDeck, true, 2, 3);
 
-    notRandomSolitaire.discardDraw(0);
-    notRandomSolitaire.discardDraw(1);
-    notRandomSolitaire.discardDraw(2);
-    assertEquals(notRandomSolitaire.getScore(), 44);
-    notRandomSolitaire.removeUsingDraw(1, 2, 1);
     System.out.println(notRandomSolitaireTextualView.toString());
 
-    assertEquals(notRandomSolitaire.getScore(), 33);
+    assertEquals(notRandomSolitaire.getScore(), 35);
+
+    notRandomSolitaire.remove(1, 2, 1, 3);
+
+    assertEquals(notRandomSolitaire.getScore(), 22);
   }
 
   //  tests for getCardAt() method
@@ -785,7 +794,7 @@ public class MultiPyramidSolitaireTest {
         new PyramidSolitaireTextualView(notRandomSolitaire);
     notRandomSolitaire.startGame(standardDeck, true, 7, 3);
     System.out.println(notRandomSolitaireTextualView.toString());
-    assertEquals(notRandomSolitaire.getCardAt(3, 3), new Card(1, "clubs"));
+    assertEquals(notRandomSolitaire.getCardAt(0, 3), new Card(12, "clubs"));
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -821,7 +830,7 @@ public class MultiPyramidSolitaireTest {
     PyramidSolitaireTextualView notRandomSolitaireTextualView =
         new PyramidSolitaireTextualView(notRandomSolitaire);
     notRandomSolitaire.startGame(standardDeck, true, 7, 3);
-    assertEquals(notRandomSolitaire.getCardAt(3, 5), 3);
+    assertEquals(notRandomSolitaire.getCardAt(3, 10), 3);
   }
 
   //////////////////////
@@ -840,15 +849,15 @@ public class MultiPyramidSolitaireTest {
   @Test
   // get the draw cards when all 3 are there
   public void testGetDrawCards3There() {
-    notRandomSolitaire.startGame(standardDeck, true, 9, 3);
+    notRandomSolitaire.startGame(standardDeck, true, 7, 3);
     PyramidSolitaireTextualView notRandomSolitaireTextualView =
         new PyramidSolitaireTextualView(notRandomSolitaire);
     System.out.println("After remove: \n");
     System.out.println(notRandomSolitaireTextualView.toString());
 
-    Card queenHeartTest = new Card(12, "hearts");
-    Card kingHeartTest = new Card(13, "hearts");
-    Card fiveHeartTest = new Card(5, "hearts");
+    Card queenHeartTest = new Card(4, "diamonds");
+    Card kingHeartTest = new Card(7, "clubs");
+    Card fiveHeartTest = new Card(9, "spades");
     Card[] drawArray = new Card[]{queenHeartTest, kingHeartTest, fiveHeartTest};
 
     assertArrayEquals(notRandomSolitaire.getDrawCards().toArray(), drawArray);
@@ -857,7 +866,7 @@ public class MultiPyramidSolitaireTest {
   @Test
   // get the draw cards when only 2 cards are left in drawArray
   public void testGetDrawCardsOnly2Left() {
-    notRandomSolitaire.startGame(standardDeck, true, 9, 3);
+    notRandomSolitaire.startGame(standardDeck, true, 6, 3);
     PyramidSolitaireTextualView notRandomSolitaireTextualView =
         new PyramidSolitaireTextualView(notRandomSolitaire);
     notRandomSolitaire.discardDraw(1);
@@ -867,9 +876,9 @@ public class MultiPyramidSolitaireTest {
     System.out.println("Test Pyramid: \n");
     System.out.println(notRandomSolitaireTextualView.toString());
 
-    Card queenHeartTest = new Card(12, "hearts");
-    Card twoDiamondTest = new Card(2, "diamonds");
-    Card fiveHeartTest = new Card(5, "hearts");
+    Card queenHeartTest = new Card(1, "clubs");
+    Card twoDiamondTest = new Card(4, "spades");
+    Card fiveHeartTest = new Card(3, "spades");
     Card[] drawArray2 = new Card[]{queenHeartTest, twoDiamondTest, fiveHeartTest};
 
     assertArrayEquals(notRandomSolitaire.getDrawCards().toArray(), drawArray2);
@@ -883,7 +892,7 @@ public class MultiPyramidSolitaireTest {
   @Test
   // game should not be over here since there are still pairs left to make
   public void testIsGameOverPyramidPairsLeft() {
-    notRandomSolitaire.startGame(standardDeck, true, 9, 3);
+    notRandomSolitaire.startGame(standardDeck, true, 7, 3);
     PyramidSolitaireTextualView notRandomSolitaireTextualView =
         new PyramidSolitaireTextualView(notRandomSolitaire);
     notRandomSolitaire.discardDraw(1);
@@ -905,8 +914,8 @@ public class MultiPyramidSolitaireTest {
         new PyramidSolitaireTextualView(notRandomSolitaire);
 
     // PLAY GAME BELOW THIS LINE
-    notRandomSolitaire.remove(1,3,1,2);
-    notRandomSolitaire.removeUsingDraw(9,1,0);
+    notRandomSolitaire.remove(1, 3, 1, 2);
+    notRandomSolitaire.removeUsingDraw(9, 1, 0);
     notRandomSolitaire.discardDraw(1);
     notRandomSolitaire.discardDraw(2);
     notRandomSolitaire.discardDraw(3);
@@ -915,29 +924,29 @@ public class MultiPyramidSolitaireTest {
     notRandomSolitaire.discardDraw(6);
     notRandomSolitaire.discardDraw(7);
     notRandomSolitaire.discardDraw(8);
-    notRandomSolitaire.removeUsingDraw(5,0,2);
+    notRandomSolitaire.removeUsingDraw(5, 0, 2);
 
-    for(int i = 0; i < 10; i++){
+    for (int i = 0; i < 10; i++) {
       notRandomSolitaire.discardDraw(i);
     }
 
-    notRandomSolitaire.removeUsingDraw(7,1,1);
-    notRandomSolitaire.removeUsingDraw(0,0,1);
+    notRandomSolitaire.removeUsingDraw(7, 1, 1);
+    notRandomSolitaire.removeUsingDraw(0, 0, 1);
 
-    for(int i = 0; i < 10; i++){
+    for (int i = 0; i < 10; i++) {
       notRandomSolitaire.discardDraw(i);
     }
 
-    for(int i = 0; i < 10; i++){
+    for (int i = 0; i < 10; i++) {
       notRandomSolitaire.discardDraw(i);
     }
 
-    notRandomSolitaire.removeUsingDraw(9,0,0);
+    notRandomSolitaire.removeUsingDraw(9, 0, 0);
 
     System.out.println("Test Pyramid: \n");
     System.out.println(notRandomSolitaireTextualView.toString());
-    assertEquals(notRandomSolitaire.getScore(),0);
-    assertEquals(notRandomSolitaire.isGameOver(),false);
+    assertEquals(notRandomSolitaire.getScore(), 0);
+    assertEquals(notRandomSolitaire.isGameOver(), false);
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -996,67 +1005,14 @@ public class MultiPyramidSolitaireTest {
 
   @Test
   // game should not be over since there is at least one card left in the stock
-  public void testIsGameOverNoMatchesButStock1() {
-    notRandomSolitaire.startGame(standardDeck, true, 5, 3);
-    PyramidSolitaireTextualView notRandomSolitaireTextualView =
-        new PyramidSolitaireTextualView(notRandomSolitaire);
-    // PLAY GAME BELOW THIS LINE
-    notRandomSolitaire.removeUsingDraw(0, 4, 3);
-    notRandomSolitaire.removeUsingDraw(0, 4, 0);
-    notRandomSolitaire.discardDraw(0);
-    notRandomSolitaire.remove(4, 2, 4, 4);
-    notRandomSolitaire.remove(4, 1, 3, 3);
-    notRandomSolitaire.removeUsingDraw(0, 3, 2);
-    notRandomSolitaire.removeUsingDraw(0, 3, 0);
-    notRandomSolitaire.discardDraw(0);
-    notRandomSolitaire.discardDraw(0);
-    notRandomSolitaire.discardDraw(2);
-    notRandomSolitaire.discardDraw(2);
-    notRandomSolitaire.discardDraw(0);
-    notRandomSolitaire.removeUsingDraw(0, 3, 1);
-    notRandomSolitaire.removeUsingDraw(1, 2, 0);
-    notRandomSolitaire.removeUsingDraw(2, 2, 1);
-    notRandomSolitaire.removeUsingDraw(1, 1, 0);
-    notRandomSolitaire.discardDraw(0);
-    notRandomSolitaire.discardDraw(0);
-    notRandomSolitaire.discardDraw(0);
-    notRandomSolitaire.discardDraw(1);
-    notRandomSolitaire.discardDraw(2);
-    notRandomSolitaire.discardDraw(0);
-    notRandomSolitaire.discardDraw(1);
-    notRandomSolitaire.discardDraw(2);
-    notRandomSolitaire.removeUsingDraw(0, 2, 2);
-    notRandomSolitaire.discardDraw(0);
-    notRandomSolitaire.discardDraw(2);
-    notRandomSolitaire.discardDraw(0);
-    notRandomSolitaire.discardDraw(2);
-    notRandomSolitaire.discardDraw(0);
-    notRandomSolitaire.discardDraw(2);
-    notRandomSolitaire.discardDraw(0);
-    notRandomSolitaire.discardDraw(2);
-    notRandomSolitaire.discardDraw(0);
-    notRandomSolitaire.removeUsingDraw(1, 1, 1);
-
-    System.out.println("Test Pyramid: \n");
-    System.out.println(notRandomSolitaireTextualView.toString());
-
-    assertEquals(notRandomSolitaire.isGameOver(), false);
-  }
-
-  @Test
-  // game should not be over since there is at least one card left in the stock
   // THEN last match is removed and game over is true!
   public void testIsGameOverNoCardsInStockOrDrawButPyramidMatchExists() {
-    notRandomSolitaire.startGame(standardDeck, true, 5, 3);
+    notRandomSolitaire.startGame(standardDeck, true, 2, 3);
     PyramidSolitaireTextualView notRandomSolitaireTextualView =
         new PyramidSolitaireTextualView(notRandomSolitaire);
     // PLAY GAME BELOW THIS LINE
-    notRandomSolitaire.removeUsingDraw(0, 4, 3);
-    notRandomSolitaire.removeUsingDraw(0, 4, 0);
-    notRandomSolitaire.discardDraw(0);
-    notRandomSolitaire.remove(4, 2, 4, 4);
 
-    for (int i = 0; i < 32; i++) {
+    for (int i = 0; i < 95; i++) {
       notRandomSolitaire.discardDraw(0);
     }
     notRandomSolitaire.discardDraw(1);
@@ -1066,34 +1022,9 @@ public class MultiPyramidSolitaireTest {
     System.out.println(notRandomSolitaireTextualView.toString());
 
     assertEquals(notRandomSolitaire.isGameOver(), false);
-    notRandomSolitaire.remove(4, 1, 3, 3);
+
+    notRandomSolitaire.remove(1, 3, 1, 2);
     assertEquals(notRandomSolitaire.isGameOver(), true);
-  }
-
-  @Test
-  // there are no pyramid matches and no cards in the stock but draw card match still exists
-  // THEN make this draw card match and then the game becomes over
-  public void testIsGameOverNoPyramidMatchesButDrawMatchExists() {
-    notRandomSolitaire.startGame(standardDeck, true, 1, 3);
-    PyramidSolitaireTextualView notRandomSolitaireTextualView =
-        new PyramidSolitaireTextualView(notRandomSolitaire);
-    // PLAY GAME BELOW THIS LINE
-
-    for (int i = 0; i < 34; i++) {
-      notRandomSolitaire.discardDraw(0);
-    }
-    for (int i = 0; i < 15; i++) {
-      notRandomSolitaire.discardDraw(1);
-    }
-    notRandomSolitaire.discardDraw(2);
-
-    System.out.println("Test Pyramid: \n");
-    System.out.println(notRandomSolitaireTextualView.toString());
-
-    assertEquals(notRandomSolitaire.isGameOver(), false);
-    notRandomSolitaire.removeUsingDraw(0, 0, 0);
-    assertEquals(notRandomSolitaire.isGameOver(), true);
-
   }
 
 
@@ -1117,7 +1048,7 @@ public class MultiPyramidSolitaireTest {
     System.out.println(notRandomSolitaireTextualView.toString());
 
     // test only makes it here if there are no exceptions
-    assertEquals(notRandomSolitaire.getDrawCards().get(1), new Card(8, "diamonds"));
+    assertEquals(notRandomSolitaire.getDrawCards().get(1), new Card(4, "diamonds"));
 
   }
 
@@ -1136,9 +1067,9 @@ public class MultiPyramidSolitaireTest {
     // then we know the cards were shuffled
 
     Card[] drawArray = {
-        new Card(1, "spades"),
-        new Card(6, "spades"),
-        new Card(8, "diamonds")};
+        new Card(4, "diamonds"),
+        new Card(7, "clubs"),
+        new Card(9, "spades")};
 
     System.out.println(notRandomSolitaireTextualView.toString());
 
@@ -1147,7 +1078,7 @@ public class MultiPyramidSolitaireTest {
 
   // test that pyramidsolitairetextual view tostring method is correct for normal pyramid
   @Test
-  public void testTextualToString() {
+  public void testTextualToString7() {
 
     PyramidSolitaireTextualView notRandomSolitaireTextualView =
         new PyramidSolitaireTextualView(notRandomSolitaire);
@@ -1156,16 +1087,51 @@ public class MultiPyramidSolitaireTest {
         standardDeck, false, 7, 3);
 
     assertEquals(notRandomSolitaireTextualView.toString(),
-        "            A♣\n"
-            + "          A♦  A♥\n"
-            + "        A♠  2♣  2♦\n"
-            + "      2♥  2♠  3♣  3♦\n"
-            + "    3♥  3♠  4♣  4♦  4♥\n"
-            + "  4♠  5♣  5♦  5♥  5♠  6♣\n"
-            + "6♦  6♥  6♠  7♣  7♦  7♥  7♠\n"
-            + "Draw: 8♣, 8♦, 8♥");
+        "            A♣  .   .   A♦  .   .   A♥\n"
+            + "          A♠  2♣  .   2♦  2♥  .   2♠  3♣\n"
+            + "        3♦  3♥  3♠  4♣  4♦  4♥  4♠  5♣  5♦\n"
+            + "      5♥  5♠  6♣  6♦  6♥  6♠  7♣  7♦  7♥  7♠\n"
+            + "    8♣  8♦  8♥  8♠  9♣  9♦  9♥  9♠  10♣ 10♦ 10♥\n"
+            + "  10♠ J♣  J♦  J♥  J♠  Q♣  Q♦  Q♥  Q♠  K♣  K♦  K♥\n"
+            + "K♠  A♣  A♦  A♥  A♠  2♣  2♦  2♥  2♠  3♣  3♦  3♥  3♠\n"
+            + "Draw: 4♣, 4♦, 4♥");
 
   }
+
+  // test that pyramidsolitairetextual view tostring method is correct for normal pyramid
+  @Test
+  public void testTextualToString1() {
+
+    PyramidSolitaireTextualView notRandomSolitaireTextualView =
+        new PyramidSolitaireTextualView(notRandomSolitaire);
+
+    notRandomSolitaire.startGame(
+        standardDeck, false, 1, 1);
+
+    assertEquals(notRandomSolitaireTextualView.toString(),
+        "A♣\n"
+            + "Draw: A♦");
+
+  }
+
+  // test that pyramidsolitairetextual view tostring method is correct for normal pyramid
+  @Test
+  public void testTextualToString3() {
+
+    PyramidSolitaireTextualView notRandomSolitaireTextualView =
+        new PyramidSolitaireTextualView(notRandomSolitaire);
+
+    notRandomSolitaire.startGame(
+        standardDeck, false, 3, 1);
+
+    assertEquals(notRandomSolitaireTextualView.toString(),
+        "    A♣  A♦  A♥\n"
+            + "  A♠  2♣  2♦  2♥\n"
+            + "2♠  3♣  3♦  3♥  3♠\n"
+            + "Draw: 4♣");
+
+  }
+
 
   // test that pyramidsolitairetextual view tostring method is correct for when game hasnt started
   // should output empty string ""

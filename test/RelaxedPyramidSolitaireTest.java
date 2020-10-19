@@ -80,7 +80,6 @@ public class RelaxedPyramidSolitaireTest {
       new Card(13, "spades"));
 
 
-
   // test getDeck method to make sure it returns standard list of cards
   @Test
   public void testGetDeck() {
@@ -713,7 +712,6 @@ public class RelaxedPyramidSolitaireTest {
     assertEquals(notRandomSolitaire.getScore(), 44);
     notRandomSolitaire.removeUsingDraw(1, 2, 1);
 
-
     assertEquals(notRandomSolitaire.getScore(), 33);
   }
 
@@ -1118,7 +1116,6 @@ public class RelaxedPyramidSolitaireTest {
   @Test
   public void testTextualToStringGameNotStarted() {
 
-
     PyramidSolitaireTextualView notRandomSolitaireTextualView =
         new PyramidSolitaireTextualView(notRandomSolitaire);
 
@@ -1153,24 +1150,21 @@ public class RelaxedPyramidSolitaireTest {
         new PyramidSolitaireTextualView(notRandomSolitaire);
     notRandomSolitaire.startGame(standardDeck, true, 8, 3);
 
-
-
     notRandomSolitaire.remove(7, 4, 7, 6);
     notRandomSolitaire.remove(7, 3, 6, 3);
-    notRandomSolitaire.remove(7,5,7,7);
-
+    notRandomSolitaire.remove(7, 5, 7, 7);
 
     System.out.println("Before remove: \n");
     System.out.println(pyramidSolitaireTextualView.toString());
 
     // do not add to 13
 
-    notRandomSolitaire.remove(7,2,6,2);
+    notRandomSolitaire.remove(7, 2, 6, 2);
 
     System.out.println("After remove: \n");
     System.out.println(pyramidSolitaireTextualView.toString());
 
-    assertEquals(notRandomSolitaire.getCardAt(6, 2),new Card(8,"clubs"));
+    assertEquals(notRandomSolitaire.getCardAt(6, 2), new Card(8, "clubs"));
 
   }
 
@@ -1181,13 +1175,10 @@ public class RelaxedPyramidSolitaireTest {
         new PyramidSolitaireTextualView(notRandomSolitaire);
     notRandomSolitaire.startGame(standardDeck, true, 6, 3);
 
-
     System.out.println("Before remove: \n");
     System.out.println(pyramidSolitaireTextualView.toString());
 
-
-
-    notRandomSolitaire.remove(3,2,4,3);
+    notRandomSolitaire.remove(3, 2, 4, 3);
 
     System.out.println("After remove: \n");
     System.out.println(pyramidSolitaireTextualView.toString());
@@ -1202,11 +1193,10 @@ public class RelaxedPyramidSolitaireTest {
         new PyramidSolitaireTextualView(notRandomSolitaire);
     notRandomSolitaire.startGame(standardDeck, true, 6, 3);
 
-
     System.out.println("Before remove: \n");
     System.out.println(pyramidSolitaireTextualView.toString());
 
-    notRandomSolitaire.remove(5,1,2,0);
+    notRandomSolitaire.remove(5, 1, 2, 0);
 
     System.out.println("After remove: \n");
     System.out.println(pyramidSolitaireTextualView.toString());
@@ -1222,15 +1212,128 @@ public class RelaxedPyramidSolitaireTest {
         new PyramidSolitaireTextualView(notRandomSolitaire);
     notRandomSolitaire.startGame(standardDeck, true, 6, 3);
 
-
     System.out.println("Before remove: \n");
     System.out.println(pyramidSolitaireTextualView.toString());
 
-    notRandomSolitaire.remove(5,0,4,3);
+    notRandomSolitaire.remove(5, 0, 4, 3);
 
     System.out.println("After remove: \n");
     System.out.println(pyramidSolitaireTextualView.toString());
 
+
+  }
+
+
+  @Test
+  // game shouldn't be over since there is one draw match left
+  public void testIsGameOverStockEmptyButLeftPairExists() {
+    PyramidSolitaireModel<Card> pairAtEnd = new RelaxedPyramidSolitaire(29);
+
+    pairAtEnd.startGame(standardDeck, true, 2, 10);
+    PyramidSolitaireTextualView notRandomSolitaireTextualView =
+        new PyramidSolitaireTextualView(pairAtEnd);
+    // PLAY GAME BELOW THIS LINE
+
+    for (int j = 0; j < 3; j++) {
+      for (int i = 0; i < 10; i++) {
+        pairAtEnd.discardDraw(i);
+      }
+    }
+
+    pairAtEnd.removeUsingDraw(9, 1, 1);
+
+    for (int i = 0; i < 10; i++) {
+      pairAtEnd.discardDraw(i);
+    }
+
+    for (int i = 0; i < 8; i++) {
+      pairAtEnd.discardDraw(i);
+    }
+
+    System.out.println("Test Pyramid: \n");
+    System.out.println(notRandomSolitaireTextualView.toString());
+
+    System.out.println("Test Pyramid: \n");
+    System.out.println(notRandomSolitaireTextualView.toString());
+
+    assertEquals(pairAtEnd.isGameOver(), false);
+
+  }
+
+  @Test
+  // game shouldn't be over since there is one draw match left
+  public void testIsGameOverStockEmptyButRightExists() {
+    PyramidSolitaireModel<Card> pairAtEnd = new RelaxedPyramidSolitaire(29);
+
+    List<Card> testPairDeck = Arrays.asList(
+        new Card(7, "diamonds"),
+        new Card(13, "spades"),
+        new Card(6, "hearts"),
+        new Card(1, "clubs"),
+        new Card(1, "diamonds"),
+        new Card(1, "hearts"),
+        new Card(1, "spades"),
+        new Card(2, "clubs"),
+        new Card(2, "diamonds"),
+        new Card(2, "hearts"),
+        new Card(2, "spades"),
+        new Card(3, "clubs"),
+        new Card(3, "diamonds"),
+        new Card(3, "hearts"),
+        new Card(3, "spades"),
+        new Card(4, "clubs"),
+        new Card(4, "diamonds"),
+        new Card(4, "hearts"),
+        new Card(4, "spades"),
+        new Card(5, "clubs"),
+        new Card(5, "diamonds"),
+        new Card(5, "hearts"),
+        new Card(5, "spades"),
+        new Card(6, "clubs"),
+        new Card(6, "diamonds"),
+
+        new Card(6, "spades"),
+        new Card(7, "clubs"),
+
+        new Card(7, "hearts"),
+        new Card(7, "spades"),
+        new Card(8, "clubs"),
+        new Card(8, "diamonds"),
+        new Card(8, "hearts"),
+        new Card(8, "spades"),
+        new Card(9, "clubs"),
+        new Card(9, "diamonds"),
+        new Card(9, "hearts"),
+        new Card(9, "spades"),
+        new Card(10, "clubs"),
+        new Card(10, "diamonds"),
+        new Card(10, "hearts"),
+        new Card(10, "spades"),
+        new Card(11, "clubs"),
+        new Card(11, "diamonds"),
+        new Card(11, "hearts"),
+        new Card(11, "spades"),
+        new Card(12, "clubs"),
+        new Card(12, "diamonds"),
+        new Card(12, "hearts"),
+        new Card(12, "spades"),
+        new Card(13, "clubs"),
+        new Card(13, "diamonds"),
+        new Card(13, "hearts"));
+
+    pairAtEnd.startGame(testPairDeck, false, 2, 0);
+    PyramidSolitaireTextualView notRandomSolitaireTextualView =
+        new PyramidSolitaireTextualView(pairAtEnd);
+
+    System.out.println("Test Pyramid: \n");
+    System.out.println(notRandomSolitaireTextualView.toString());
+
+    pairAtEnd.remove(1, 0);
+
+    System.out.println("Test Pyramid: \n");
+    System.out.println(notRandomSolitaireTextualView.toString());
+
+    assertEquals(pairAtEnd.isGameOver(), false);
 
   }
 

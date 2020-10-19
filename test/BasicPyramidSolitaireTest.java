@@ -436,7 +436,6 @@ public class BasicPyramidSolitaireTest {
   }
 
 
-
   // check if card is not 13 value (not king)
   // throw exception if so
   @Test(expected = IllegalArgumentException.class)

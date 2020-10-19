@@ -1,4 +1,5 @@
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import cs3500.pyramidsolitaire.controller.PyramidSolitaireController;
 import cs3500.pyramidsolitaire.controller.PyramidSolitaireTextualController;
@@ -6,6 +7,9 @@ import cs3500.pyramidsolitaire.model.hw02.BasicPyramidSolitaire;
 import cs3500.pyramidsolitaire.model.hw02.Card;
 import cs3500.pyramidsolitaire.model.hw04.FakeModel;
 import cs3500.pyramidsolitaire.model.hw02.PyramidSolitaireModel;
+import cs3500.pyramidsolitaire.model.hw04.MultiPyramidSolitaire;
+import cs3500.pyramidsolitaire.model.hw04.RelaxedPyramidSolitaire;
+import cs3500.pyramidsolitaire.view.PyramidSolitaireTextualView;
 import java.io.StringReader;
 import org.junit.Test;
 
@@ -20,6 +24,50 @@ public class PyramidSolitaireTextualControllerTest {
   StringBuilder out;
 
   ////////////////////////////////////////////////////////////////////////////
+
+  // test rm2 with multipyramid, make sure controller can work with multi
+  @Test
+  public void testMultiRm2() {
+
+    out = new StringBuilder("");
+    in = new StringReader("rm2 5 1 5 3 q");
+
+    model = new MultiPyramidSolitaire(2);
+    controller = new PyramidSolitaireTextualController(in, out);
+
+    PyramidSolitaireTextualView view = new PyramidSolitaireTextualView(model);
+
+    controller.playGame(model, model.getDeck(), true, 5, 3);
+
+    System.out.println(view.toString());
+
+    assertEquals(model.getCardAt(4, 0), null);
+
+    assertEquals(model.getCardAt(4, 2), null);
+  }
+
+  // test rm2 with multipyramid, make sure controller can work with multi
+  @Test
+  public void testRelaxedRm2() {
+
+    out = new StringBuilder("");
+    in = new StringReader("rm2 5 2 5 4 rm2 5 5 4 4 q");
+
+    model = new RelaxedPyramidSolitaire(2);
+    controller = new PyramidSolitaireTextualController(in, out);
+
+    PyramidSolitaireTextualView view = new PyramidSolitaireTextualView(model);
+
+    controller.playGame(model, model.getDeck(), true, 5, 3);
+
+    System.out.println(view.toString());
+
+    assertEquals(model.getCardAt(4, 1), null);
+
+    assertEquals(model.getCardAt(4, 3), null);
+    assertEquals(model.getCardAt(4, 4), null);
+    assertEquals(model.getCardAt(3, 3), null);
+  }
 
   // TESTS FOR CONSTRUCTOR EXCEPTIONS
 

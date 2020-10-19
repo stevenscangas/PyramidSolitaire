@@ -216,7 +216,6 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
   public void remove(int row1, int card1, int row2, int card2)
       throws IllegalArgumentException, IllegalStateException {
 
-
     if (gameStatus == GameStatus.NOTSTARTED) {
       throw new IllegalStateException("Game has not been started yet.");
     }
@@ -241,7 +240,6 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
     if (getCardAt(row1, card1).getValue() + getCardAt(row2, card2).getValue() != 13) {
       throw new IllegalArgumentException("Card values do not add up to 13.");
     }
-
 
     // see if both cards are exposed, if so, continue
     if (!isCellExposed(row1, card1) || !isCellExposed(row2, card2)) {
@@ -547,8 +545,6 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
       }
     }
 
-
-
     // game not over until there are no combinations AND no cards left in stock to use
 
     if (pyramidMatchExists || drawMatchExists) {
@@ -698,5 +694,12 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
         && (getCardAt(row + 1, card + 1) == null);
   }
 
+  /**
+   * Determines whether or not this PyramidSolitaire is equal to an input PyramidSolitaire.
+   * To be equal, the two PyramidSolitaires must only be of the same class.
+   */
+  public boolean isEqual(PyramidSolitaireModel<Card> other) {
+    return other.getClass() == this.getClass();
+  }
 
 }
