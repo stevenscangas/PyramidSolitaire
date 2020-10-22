@@ -1,7 +1,18 @@
 # cs3500.pyramidsolitaire.PyramidSolitaire
 project for object oriented design class
 
-Please run this program through the main class in OODHW3/src/cs3500/pyramidsolitaire/controller/ Main
+Please run this program through the main class in OODHW3/src/cs3500/PyramidSolitaire (this is the main class)
+
+There are multiple possible run configurations (command line arguments) the user can use:
+"basic" (default option if none selected)
+"multipyramid": creates 3 pyramids combined to create a bigger, overlapping triple pyramid
+"relaxed": allows the user to remove cards in pairs if one of them covers the other directly and is the only card that covers it
+
+IF the user has input one of these arguments, they can also input the number of rows & number of draw cards.
+These MUST be BOTH entered if you want to add one.
+Default pyramid is: basic 7 3
+Note: if you choose a size that uses more cards than there are in the deck, the game cannot start.
+
 
 The rules for pyramid solitaire can be found online, please look them up before playing or the game will make no sense.
 Basically there are 5 commands for the user to interact with the game.
